@@ -1,7 +1,7 @@
 ---
 title: "R script Thesis"
 author: "Rik Lubbers"
-format: docx
+#format: docx
 editor: visual
 editor_options: 
   chunk_output_type: console
@@ -57,7 +57,7 @@ library(gtsummary)
 #### Loading data and creating subset
 
 ```{r Dota load and subsetting}
-DHS_children_sub <- read_sav("D:/Onedrive_/OneDrive/THESIS RUG/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% dplyr::select(CASEID,
+DHS_children_sub <- read_sav("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% dplyr::select(CASEID,
                                              V001, V005,
                                              V023, V024,
                                              V149, V729,
@@ -75,7 +75,7 @@ DHS_children_sub <- read_sav("D:/Onedrive_/OneDrive/THESIS RUG/DATA/Uganda Full/
 
 #Add nearest facility in meters
 
-Travel_time_clust = read_xls("D:/Onedrive_/OneDrive/THESIS RUG/DATA/Uganda Full/Analyses/Travel_time.xls", col_names = T)
+Travel_time_clust = read_xls("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Analyses/Travel_time.xls", col_names = T)
 
 DHS_children_sub = merge(DHS_children_sub, Travel_time_clust, by.x = "V001", by.y = "DHSCLUST")
 
@@ -454,10 +454,13 @@ DHS_children_sub %>%
 pred_mat = quickpred(DHS_children_sub, mincor = 0.25)
 
 #used 20 imputations as the most up to date version of R does not work with the proposed package "HowManyImputation" for replicate SE. 2- 10 is advised but we are more liberal with 20 for reproducible SE
+
 DHS_children_sub_multimp <- mice(DHS_children_sub, m=20, predictorMatrix = pred_mat, set.seed = 123, method = "pmm")
 
 #Complete dataset
-DHS_children_sub <-mice::complete(DHS_children_sub_multimp, action = "long")
+#DHS_children_sub <-mice::complete(DHS_children_sub_multimp, action = "long")
+
+DHS_children_sub <-mice::complete(DHS_children_sub_multimp)
 
 #Checking quality of imputations
 #ALL
