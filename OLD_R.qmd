@@ -1,0 +1,318 @@
+---
+title: "Old R code"
+format: html
+editor: visual
+---
+
+```{r package loading}
+library(tidyverse)
+library(haven)
+library(lattice)
+library(data.table)
+library(knitr)
+library(survey)
+ options(survey.lonely.psu="adjust")
+library(expss)
+library(labelled)
+library(table1)
+library(readxl)
+library(GGally)
+library(kableExtra)
+library(xtable)
+library(modelsummary)
+library(performance)
+library(finalfit)
+library(naniar)
+library(rms)
+library(openxlsx)
+library(rcompanion)
+library(questionr)
+library(flextable)
+library(MASS)
+library(car)
+library(cowplot)
+library(heatmaply)
+library(esquisse)
+library(visreg)
+library(forcats) 
+library(mosaic)
+library(magick)
+library(DT)
+library(mice)
+ 
+```
+
+```{r subsetting urban rural}
+
+DHS_children_sub_U = subset(DHS_children_sub, DHS_children_sub$URBAN_RURA =="U")
+
+DHS_children_sub_R = subset(DHS_children_sub, DHS_children_sub$URBAN_RURA =="R")
+```
+
+```{r survey weights}
+DHS_children_sub_weighted_U <- svydesign(id = DHS_children_sub_U$V001,
+                                       strata  = DHS_children_sub_U$V023,
+                                       weights = DHS_children_sub_U$V005,
+                                       nest    = TRUE,
+                                       data    = DHS_children_sub_U,
+                                       variables = NULL)
+
+DHS_children_sub_weighted_R <- svydesign(id = DHS_children_sub_R$V001,
+                                       strata  = DHS_children_sub_R$V023,
+                                       weights = DHS_children_sub_R$V005,
+                                       nest    = TRUE,
+                                       data    = DHS_children_sub_R,
+                                       variables = NULL)
+```
+
+```{r imputing missing data using mean and missing category)}
+
+############################
+#MEAN AND NEW CATEGORY#
+#Adding mean for continuous data
+#DHS_children_sub$M19[is.na(DHS_children_sub$M19)] <- svymean(DHS_children_sub$M19, DHS_children_sub_weighted, na.rm=T)
+
+#DHS_children_sub$M5[is.na(DHS_children_sub$M5)] <- svymean(DHS_children_sub$M5, DHS_children_sub_weighted, na.rm=T)
+
+#DHS_children_sub$V505[is.na(DHS_children_sub$V505)] <- svymean(DHS_children_sub$V505, DHS_children_sub_weighted, na.rm=T)
+
+#DHS_children_sub$V445[is.na(DHS_children_sub$V445)] <- svymean(DHS_children_sub$V445, DHS_children_sub_weighted, na.rm=T)
+
+#Adding new category for categorical data
+#DHS_children_sub$V729 = fct_explicit_na(DHS_children_sub$V729, na_level = "Missing")
+
+#DHS_children_sub$B11 = fct_explicit_na(DHS_children_sub$B11, na_level = "Missing")
+
+#DHS_children_sub$H11 = fct_explicit_na(DHS_children_sub$H11, na_level = "Missing")
+
+#DHS_children_sub$V113 = fct_explicit_na(DHS_children_sub$V113, na_level = "Missing")
+
+#DHS_children_sub$H10 = fct_explicit_na(DHS_children_sub$H10, na_level = "Missing")
+
+#DHS_children_sub$H7 = fct_explicit_na(DHS_children_sub$H7, na_level = "Missing")
+
+#DHS_children_sub$H22 = fct_explicit_na(DHS_children_sub$H22, na_level = "Missing")
+
+############################
+```
+
+```{r}
+{r survey weights}
+#dividing weight variable by 1000000
+
+DHS_children_sub$V005 = DHS_children_sub$V005/1000000
+
+#Creating survey weights
+DHS_children_sub_weighted <- svydesign(id = DHS_children_sub$V001,
+                                       strata  = DHS_children_sub$V023,
+                                       weights = DHS_children_sub$V005,
+                                       nest    = TRUE,
+                                       data    = DHS_children_sub,
+                                       variables = NULL)
+```
+
+```{r}
+DHS_children_sub_weighted_U <- svydesign(id = DHS_children_sub_U$V001,
+                                       strata  = DHS_children_sub_U$V023,
+                                       weights = DHS_children_sub_U$V005,
+                                       nest    = TRUE,
+                                       data    = DHS_children_sub_U,
+                                       variables = NULL)
+
+DHS_children_sub_weighted_R <- svydesign(id = DHS_children_sub_R$V001,
+                                       strata  = DHS_children_sub_R$V023,
+                                       weights = DHS_children_sub_R$V005,
+                                       nest    = TRUE,
+                                       data    = DHS_children_sub_R,
+                                       variables = NULL)
+```
+
+```{r aggregating means}
+stunt_mean = groupwiseMean(data        =  DHS_children_sub,
+              var         = "HW5",
+              group       =  "V001",
+              traditional = T)
+
+under_mean = groupwiseMean(data        =  DHS_children_sub,
+              var         = "HW8",
+              group       =  "V001",
+              traditional = T)
+
+wast_mean = groupwiseMean(data        =  DHS_children_sub,
+              var         = "HW11",
+              group       =  "V001",
+              traditional = T)
+
+
+plot(stunt_mean$Mean)
+plot(under_mean$Mean)
+plot(wast_mean$Mean)
+
+#write.xlsx(means, file = "DHS_means.xlsx", colNames = TRUE)
+```
+
+```{r GLM URBAN}
+#Generalized linear model Urban
+#stunting
+glm_stunted_U = svyglm(formula = HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
+              design = DHS_children_sub_weighted,
+              family = gaussian(),
+              rescale = T)
+
+
+glm_stunted_U = svyglm(formula = HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
+              design = DHS_children_sub_weighted,
+              family = gaussian(),
+              rescale = T)
+
+visreg(glm_stunted_U)
+
+summary(glm_stunted_U)
+
+glm_stunted_U = stepAIC(glm_stunted_U, direction = "both")
+
+modelsummary(glm_stunted_U, stars = T)
+
+check_model(glm_stunted_U)
+performance(glm_stunted_U)
+vif(glm_stunted_U)
+
+ggcoef_model(glm_stunted_U)
+
+#Goodness of fit
+1-pchisq(307, 8)
+
+#Underweight
+glm_underweight = svyglm(formula = HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + H10 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 +  travel_time,
+              design = DHS_children_sub_weighted,
+              family = gaussian(),
+              rescale = T)
+
+visreg(glm_underweight)
+summary(glm_underweight)
+
+glm_underweight = stepAIC(glm_underweight, direction = "both")
+
+modelsummary(glm_underweight, stars = T)
+
+check_model(glm_underweight)
+performance(glm_underweight)
+vif(glm_underweight)
+
+ggcoef_model(glm_underweight)
+
+#Goodness of fit
+1-pchisq(307, 8)
+
+#Wasting
+glm_wasted = svyglm(formula = HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + H10 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 +  travel_time,
+              design = DHS_children_sub_weighted,
+              family = gaussian(),
+              rescale = T)
+
+visreg(glm_wasted)
+summary(glm_wasted)
+
+glm_wasted = stepAIC(glm_wasted, direction = "both")
+
+modelsummary(glm_wasted, stars = T)
+
+check_model(glm_wasted)
+performance(glm_wasted)
+vif(glm_wasted)
+
+ggcoef_model(glm_wasted)
+
+#Goodness of fit
+1-pchisq(307, 8)
+
+#Comparing models
+modelsummary(list(glm_stunted, glm_underweight, glm_wasted), stars = TRUE)
+
+## as command for modelsummary to get document "output = "test.docx"" 
+ggcoef_compare(list(glm_stunted, glm_underweight, glm_wasted))
+
+```
+
+```{r GLM RURAL}
+#Generalized linear model Urban
+#stunting
+glm_stunted = svyglm(formula = HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 travel_time,
+              design = DHS_children_sub_weighted,
+              family = gaussian(),
+              rescale = T)
+
+
+glm_stunted = svyglm(formula = HW5 ~ B4 + H11 + H22 + V481 + V191 + V212 + V445 + V136 + travel_time + M5,
+              design = DHS_children_sub_weighted,
+              family = gaussian(),
+              rescale = T)
+
+visreg(glm_stunted)
+
+summary(glm_stunted)
+
+glm_stunted = stepAIC(glm_stunted, direction = "both")
+
+modelsummary(glm_stunted, stars = T)
+
+check_model(glm_stunted)
+performance(glm_stunted)
+vif(glm_stunted)
+
+ggcoef_model(glm_stunted)
+
+#Goodness of fit
+1-pchisq(307, 8)
+
+#Underweight
+glm_underweight = svyglm(formula = HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + H10 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 +  travel_time,
+              design = DHS_children_sub_weighted,
+              family = gaussian(),
+              rescale = T)
+
+visreg(glm_underweight)
+summary(glm_underweight)
+
+glm_underweight = stepAIC(glm_underweight, direction = "both")
+
+modelsummary(glm_underweight, stars = T)
+
+check_model(glm_underweight)
+performance(glm_underweight)
+vif(glm_underweight)
+
+ggcoef_model(glm_underweight)
+
+#Goodness of fit
+1-pchisq(307, 8)
+
+#Wasting
+glm_wasted = svyglm(formula = HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + H10 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 +  travel_time,
+              design = DHS_children_sub_weighted,
+              family = gaussian(),
+              rescale = T)
+
+visreg(glm_wasted)
+summary(glm_wasted)
+
+glm_wasted = stepAIC(glm_wasted, direction = "both")
+
+modelsummary(glm_wasted, stars = T)
+
+check_model(glm_wasted)
+performance(glm_wasted)
+vif(glm_wasted)
+
+ggcoef_model(glm_wasted)
+
+#Goodness of fit
+1-pchisq(307, 8)
+
+#Comparing models
+modelsummary(list(glm_stunted, glm_underweight, glm_wasted), stars = TRUE)
+
+## as command for modelsummary to get document "output = "test.docx"" 
+ggcoef_compare(list(glm_stunted, glm_underweight, glm_wasted))
+
+```
