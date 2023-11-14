@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.show='hide', eval=FALSE)
 # Loading packages
 
 ```{r package loading}
+library(NCmisc)
 library(tidyverse)
 library(haven)
 library(lattice)
@@ -53,6 +54,8 @@ library(gtsummary)
 library(styler)
 library(languageserver)
 library(httpgd)
+
+list.functions.in.file(filename = "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/0_code/PhD-Code/Study_1/R_script_thesis.qmd", alphabetic = TRUE)
 ```
 
 # Data handling
