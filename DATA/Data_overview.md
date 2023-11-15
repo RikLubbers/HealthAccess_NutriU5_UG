@@ -1,0 +1,9 @@
+| ID | Layer                        | Data                                  | Type          | Projection          | Source                                                                                   |
+|----|------------------------------|---------------------------------------|---------------|---------------------|------------------------------------------------------------------------------------------|
+| 1  | Landcover (scheme 1)        | Regional Centre For Mapping Of Resources For Development  | Raster        | Arc_1960_UTM_Zone_35N | [Link](http://geoportal.rcmrd.org/layers/servir%3Auganda_sentinel2_lulc2016)         |
+| 2  | DEM                          | Opendata RCMRD                        | Raster        | Arc_1960_UTM_Zone_35N | [Link](https://opendata.rcmrd.org/datasets/uganda-srtm-dem-30-meters)                |
+| 3  | Health centers               | Sub-Saharan public healthcare facilities dataset | Vector points | Arc_1960_UTM_Zone_35N | [Link](https://doi.org/10.1038/s41597-019-0142-2)                                    |
+| 4  | Roads                        | OpenStreetMap                         | Vector lines  | Arc_1960_UTM_Zone_35N | [Link](https://data.humdata.org/dataset/hotosm_uga_roads)                              |
+| 5  | Administrative boundaries    | Administrative boundaries             | Vector polygons | Arc_1960_UTM_Zone_35N | [Link](https://data.humdata.org/dataset/cod-ab-uga?)                                  |
+| 7  | DHS                          | Household clusters                    | Vector points | Arc_1960_UTM_Zone_35N | [Link](https://dhsprogram.com/pubs/pdf/FR333/FR333.pdf)                                |
+| 8  | Water bodies                 | Water bodies                          | Polygons      | Arc_1960_UTM_Zone_35N | [Link](https://geoportal.icpac.net/layers/geonode:uga_water_areas_dcw)                |
