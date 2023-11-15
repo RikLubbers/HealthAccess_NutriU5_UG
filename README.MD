@@ -1,7 +1,5 @@
----
-
 <div align="center">
-    <h1>MYPROJECT</h1>
+    <h1>Physical Accessibility to Public Healthcare Facilities and Undernutrition in Children Under 5 in Uganda</h1>
 </div>
 
 ## Description
@@ -75,7 +73,6 @@ The code is written in R and requires multiple packages. They are listed below:
     library(languageserver)
     library(httpgd)
     ```
-
 
 ## Usage
 
