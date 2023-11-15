@@ -96,10 +96,10 @@ Note that the data used in this study is not publicly available due to privacy c
 
 You are welcome to contribute to this project by submitting bug reports, suggesting improvements, or sending pull requests. However, it is advisable to first contact the project owner, Rik Lubbers, at [r.u.lubbers@rug.nl](mailto:r.u.lubbers@rug.nl) or [r.u.lubbers@umcg.nl](mailto:r.u.lubbers@umcg.nl) to discuss your ideas or changes before making any contributions.
 
-Your contributions are highly appreciated and can help make this project better. Please follow the guidelines and best practices for contributing outlined in the [CONTRIBUTING.md](../../../CONTRIBUTING.md) file.
+Your contributions are highly appreciated and can help make this project better. Please follow the guidelines and best practices for contributing outlined in the [CONTRIBUTING.md](https://github.com/RikLubbers/PhD-Code/blob/main/CONTRIBUTING.md) file.
 
 ## License
 
-Please refer to the [LICENSE.txt](../../../LICENSE.txt) file in the top directory for details.
+Please refer to the [LICENSE.txt](https://github.com/RikLubbers/PhD-Code/blob/main/LICENSE.txt) file in the top directory for details.
 
 ---
