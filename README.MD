@@ -1,8 +1,6 @@
 ---
 
-# Project Title
-
-Physical Accessibility to Public Healthcare Facilities and Undernutrition in Children Under-5 in Uganda
+# Physical Accessibility to Public Healthcare Facilities and Undernutrition in Children Under-5 in Uganda
 
 ## Description
 
