@@ -92,6 +92,9 @@ Once you have downloaded the repository, you can open the R project file (`PhD-C
 
 Note that the data used in this study is not publicly available due to privacy concerns. However, the code can be run on other datasets with similar variables and structure.
 
+#### Important Note on AccessMod
+It's essential to mention that the usage of AccessMod in this project does not allow for a fully reproducible workflow. AccessMod is an external tool that requires manual input and customization based on data as provided in the [Data overview](Study_1\DATA\Data overview.ods). While the code provided can reproduce the models given the travel time data, the travel time data itself cannot be reproduced without manual input.
+
 ## Contributing
 
 You are welcome to contribute to this project by submitting bug reports, suggesting improvements, or sending pull requests. However, it is advisable to first contact the project owner, Rik Lubbers, at [r.u.lubbers@rug.nl](mailto:r.u.lubbers@rug.nl) or [r.u.lubbers@umcg.nl](mailto:r.u.lubbers@umcg.nl) to discuss your ideas or changes before making any contributions.
