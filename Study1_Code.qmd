@@ -1,5 +1,5 @@
 ---
-title: "R script Thesis"
+title: "Study1_Code"
 author: "Rik Lubbers"
 #format: docx
 editor: visual
@@ -16,6 +16,28 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.show='hide', eval=FALSE)
 # Loading packages
 
 ```{r package loading}
+# List of required packages
+required_packages <- c(
+  "NCmisc", "tidyverse", "haven", "lattice", "data.table", "knitr", "survey",
+  "expss", "labelled", "table1", "readxl", "GGally", "kableExtra", "xtable",
+  "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
+  "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
+  "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
+  "languageserver", "httpgd"
+)
+
+# Function to check and install missing packages
+install_missing_packages <- function(packages) {
+  missing_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
+  if (length(missing_packages) > 0) {
+    install.packages(missing_packages, dependencies = TRUE)
+  }
+}
+
+# Check and install missing packages
+install_missing_packages(required_packages)
+
+# Load the installed packages
 library(NCmisc)
 library(tidyverse)
 library(haven)
@@ -23,7 +45,7 @@ library(lattice)
 library(data.table)
 library(knitr)
 library(survey)
- options(survey.lonely.psu="adjust")
+  options(survey.lonely.psu = "adjust")
 library(expss)
 library(labelled)
 library(table1)
@@ -46,7 +68,7 @@ library(cowplot)
 library(heatmaply)
 library(esquisse)
 library(visreg)
-library(forcats) 
+library(forcats)
 library(mosaic)
 library(DT)
 library(mice)
@@ -54,6 +76,7 @@ library(gtsummary)
 library(styler)
 library(languageserver)
 library(httpgd)
+
 
 list.functions.in.file(filename = "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/0_code/PhD-Code/Study_1/R_script_thesis.qmd", alphabetic = TRUE)
 ```

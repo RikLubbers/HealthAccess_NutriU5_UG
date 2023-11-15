@@ -1,0 +1,105 @@
+---
+
+# Project Title
+
+Physical Accessibility to Public Healthcare Facilities and Undernutrition in Children Under-5 in Uganda
+
+## Description
+
+This repository contains the code for the first study of my PhD research in the Global Health Unit at the University Medical Center Groningen (UMCG). Study 1 is an analysis of the impact of physical accessibility on undernutrition outcomes in children under-5 in Uganda.
+
+## Table of Contents
+
+- [Project Title](#project-title)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [License](#license)
+
+## Getting Started
+
+### Prerequisites
+
+#### Software
+- [R](https://www.r-project.org/) (version 4.0.3 or higher)
+- [RStudio](https://rstudio.com/) (version 1.4.1106 or higher) or any other IDE for R
+- [Git](https://git-scm.com/) (version 2.30.0 or higher)
+- [GitHub Desktop](https://desktop.github.com/) (version 2.6.3 or higher) or any other Git client
+- [ARC-GIS](https://www.arcgis.com/index.html) (version 10.8.1 or higher) or any other GIS software
+- [Access Mod 5](https://www.accessmod.org/) (version 5.0.0 or higher)
+
+#### R packages
+The code is written in R and requires multiple packages. They are listed below:
+
+    ```r
+    # List of required packages
+    library(NCmisc)
+    library(tidyverse)
+    library(haven)
+    library(lattice)
+    library(data.table)
+    library(knitr)
+    library(survey)
+        options(survey.lonely.psu = "adjust")
+    library(expss)
+    library(labelled)
+    library(table1)
+    library(readxl)
+    library(GGally)
+    library(kableExtra)
+    library(xtable)
+    library(modelsummary)
+    library(performance)
+    library(finalfit)
+    library(naniar)
+    library(rms)
+    library(openxlsx)
+    library(rcompanion)
+    library(questionr)
+    library(flextable)
+    library(MASS)
+    library(car)
+    library(cowplot)
+    library(heatmaply)
+    library(esquisse)
+    library(visreg)
+    library(forcats)
+    library(mosaic)
+    library(DT)
+    library(mice)
+    library(gtsummary)
+    library(styler)
+    library(languageserver)
+    library(httpgd)
+    ```
+
+
+## Usage
+
+To run the code in this repository, you will need to install the software above and download the code and data. The following sections explain how to do this.:
+
+### Downloading the code and data
+
+To download the code and data in this repository, you can either:
+
+- Clone the repository using Git: `git clone https://github.com/username/repository.git`
+- Download the repository as a ZIP file by clicking on the green "Code" button on the repository homepage and selecting "Download ZIP"
+
+Once you have downloaded the repository, you can open the R project file (`PhD-Code.Rproj`) in RStudio and run the code in the various R scripts.
+
+Note that the data used in this study is not publicly available due to privacy concerns. However, the code can be run on other datasets with similar variables and structure.
+
+## Contributing
+
+You are welcome to contribute to this project by submitting bug reports, suggesting improvements, or sending pull requests. However, it is advisable to first contact the project owner, Rik Lubbers, at [r.u.lubbers@rug.nl](mailto:r.u.lubbers@rug.nl) or [r.u.lubbers@umcg.nl](mailto:r.u.lubbers@umcg.nl) to discuss your ideas or changes before making any contributions.
+
+Your contributions are highly appreciated and can help make this project better. Please follow the guidelines and best practices for contributing outlined in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+## License
+
+Please refer to the [LICENSE.txt](LICENSE.txt) file for details in the top directory.
+
+---
