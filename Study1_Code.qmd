@@ -38,7 +38,6 @@ install_missing_packages(required_packages)
 
 
 # Load the installed packages
-library(NCmisc)
 library(tidyverse)
 library(haven)
 library(lattice)
@@ -73,12 +72,8 @@ library(mosaic)
 library(DT)
 library(mice)
 library(gtsummary)
-library(styler)
 library(languageserver)
 library(httpgd)
-
-
-list.functions.in.file(filename = "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/0_code/PhD-Code/Study_1/R_script_thesis.qmd", alphabetic = TRUE)
 ```
 
 # Data handling
@@ -86,9 +81,10 @@ list.functions.in.file(filename = "D:/Onedrive/PhD_Undernutrition_Uganda_Physica
 
 ```{r Data load and subsetting}
 # Load the children dataset from a .SAV file 
-## depending on computer C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV   
+## depending on computer  "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
+##                        "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 
-DHS_children_sub <- read_sav("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
+DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
   dplyr::select(
     CASEID,
     V001, V005,
@@ -109,7 +105,9 @@ DHS_children_sub <- read_sav("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Acc
 
 
 # Load the travel time data from an Excel file
-Travel_time_clust = read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Analyses/Travel_time.xls", col_names = TRUE)
+## Depending on computer    "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Analyses/Travel_time.xls"
+##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"   
+Travel_time_clust = read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls" , col_names = TRUE)
 
 
 # Merge the children dataset with the travel time data using the common column "V001" in both datasets
@@ -330,7 +328,7 @@ Travel_time_clust$travel_time_cat = expss::recode(Travel_time_clust$raster_trave
 )
 ```
 
-#### Providing labels
+## Providing labels
 
 ```{r providing labels}
 # Assigning variable labels to the dataset
@@ -376,7 +374,7 @@ var_lab(DHS_children_sub$travel_time_cat) = "Travel Time Categorical"
 var_lab(Travel_time_clust$travel_time_cat) = "Travel Time Categorical"
 ```
 
-#### Removing invalid data
+## Removing invalid data
 
 ```{r removing invalid data}
 # Removing invalid data
@@ -463,6 +461,7 @@ miss_case_table(DHS_children_sub)
 
 ## Visualize missing data
 vis_miss(DHS_children_sub) + theme(axis.text.x = element_text(angle=80))
+
 gg_miss_upset(DHS_children_sub)
 
 ## Define dependent and explanatory variables for missing data analysis

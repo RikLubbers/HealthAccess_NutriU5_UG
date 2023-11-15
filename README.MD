@@ -8,7 +8,7 @@ This repository contains the code for the first study of my PhD research in the 
 
 ## Table of Contents
 
-- [Project Title](#project-title)
+- [Study Title](#physical-accessibility-to-public-healthcare-facilities-and-undernutrition-in-children-under-5-in-uganda)
   - [Description](#description)
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
