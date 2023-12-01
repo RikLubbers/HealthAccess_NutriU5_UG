@@ -23,7 +23,7 @@ required_packages <- c(
   "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
   "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
   "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
-  "languageserver", "httpgd"
+  "languageserver", "httpgd", "miceadds"
 )
 
 ## Function to check and install missing packages
@@ -75,6 +75,7 @@ library(mice)
 library(gtsummary)
 library(languageserver)
 library(httpgd)
+library(miceadds)
 ```
 
 # Data handling
@@ -685,7 +686,7 @@ ggcoef_model(glm_wasted)
 ```{r Model comparison}
 # Comparing Models for Stunting, Wasting, and Underweight
 ## Create a list of the GLMs for stunting, wasting, and underweight
-models = modelsummary(list(glm_stunted, glm_wasted, glm_underweight), stars = TRUE, coef_rename = T, col.names=c("", "Stunting", "Wasting", "Underweight"))
+models = modelsummary(list(glm_stunted, glm_wasted, glm_underweight), stars = TRUE, coef_rename = T, col.names=c("", "Stunting", "Wasting", "Underweight")) 
 
 ## Display the model summary
 models
@@ -717,17 +718,17 @@ ggcoef_compare(model = list("Stunted" = glm_stunted, "Wasted" = glm_wasted, "Und
 ## Stunting  
 MICE_model_stunt = with(DHS_children_sub_multimp, lm(HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,))
 
-modelsummary((pool(modeltest)), stars = TRUE, coef_rename = T)
+modelsummary((pool(MICE_model_stunt)), stars = TRUE, coef_rename = T)
 
 ## Wasting
 MICE_model_wast = with(DHS_children_sub_multimp, lm(HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,))
 
-modelsummary((pool(modeltest)), stars = TRUE, coef_rename = T)
+modelsummary((pool(MICE_model_wast)), stars = TRUE, coef_rename = T)
 
 ## Underweight
 MICE_model_underweight= with(DHS_children_sub_multimp, lm(HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,))
 
-modelsummary((pool(modeltest)), stars = TRUE, coef_rename = T)
+modelsummary((pool(MICE_model_underweight)), stars = TRUE, coef_rename = T)
 
 
 # Comparison of MICE Models
@@ -736,4 +737,30 @@ MICEmodels = modelsummary(list(MICE_model_stunt, MICE_model_wast, MICE_model_und
 
 ## Display the model summary
 MICEmodels
+```
+
+# Weighted MICE models
+```{r Weighted MICE models}
+# do imputation
+DHS_children_sub_multimp_weighted <- mice::mice( DHS_children_sub, predictorMatrix= pred_mat, method= "PMM",
+           imputationWeights = DHS_children_sub$v005, m=20, maxit = 5, set.seed = 123) 
+
+## Stunting  
+MICE_model_stunt_weight = with(DHS_children_sub_multimp_weighted, lm(HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,))
+
+modelsummary((pool(MICE_model_stunt_weight)), stars = TRUE, coef_rename = T)
+
+## Wasting
+MICE_model_wast_weight = with(DHS_children_sub_multimp_weighted, lm(HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,))
+
+modelsummary((pool(MICE_model_wast_weight)), stars = TRUE, coef_rename = T)
+
+## Underweight
+MICE_model_underweight_weight = with(DHS_children_sub_multimp_weighted, lm(HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,))
+
+modelsummary((pool(MICE_model_underweight_weight)), stars = TRUE, coef_rename = T)
+
+MICEmodels_weight = modelsummary(list(MICE_model_stunt, MICE_model_wast, MICE_model_underweight), stars = TRUE, coef_rename = T, col.names=c("", "Stunting", "Wasting", "Underweight"))
+
+MICEmodels_weight
 ```
