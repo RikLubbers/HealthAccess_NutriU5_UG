@@ -23,7 +23,7 @@ required_packages <- c(
   "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
   "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
   "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
-  "languageserver", "httpgd", "miceadds", "ggmice"
+  "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations"
 )
 
 ## Function to check and install missing packages
@@ -77,6 +77,7 @@ library(languageserver)
 library(httpgd)
 library(miceadds)
 library(ggmice)
+library(howManyImputations)
 ```
 
 # Data handling
@@ -531,12 +532,17 @@ DHS_children_sub %>%
 
 ```{r imputing missing data}
 # Imputing Data using Multiple Imputation by Chained Equation (MICE)
+
+# We followed the two-step recipe for imputation from von Hippel (2018) to determine the number of imputations needed for our data. The two-step recipe is as follows:
+#   1. Carry out a pilot analysis. Impute the data using a convenient number of imputations. (20 imputations is a reasonable default, if it doesn’t take too long.) Estimate the FMI by analyzing the imputed data.
+#   2. Plug the estimated FMI into the formula above to figure out how many imputations you need to achieve a certain value of CV(SE). If you need more imputations than you had in the pilot, then add those imputations and analyze the data again.
+
 ## Create a predictor matrix for imputation
 pred_mat = quickpred(DHS_children_sub, mincor = 0.25)
 
-## Perform multiple imputations (m=20) using the MICE package. used 20 imputations for replicitable SE. 2- 10 is advised but we are more liberal with 20 for reproducible SE
+## Two-step recipe for imputation, first we do a pilot analysis with 20 imputations and then we calculate the number of imputations needed (see # MICE models unweighted))
 DHS_children_sub_multimp <- mice(DHS_children_sub, 
-  m=20, 
+  m = 150, 
   predictorMatrix = pred_mat, 
   set.seed = 123, 
   method = "pmm"
@@ -547,8 +553,8 @@ DHS_children_sub <- mice::complete(DHS_children_sub_multimp)
 
 # Check the quality of imputations by visualizing imputed data distribution
 ## Density plot for all variables
-ggmice(DHS_children_sub_multimp, aes(V445)) +
- geom_density()
+ggmice(DHS_children_sub_multimp, aes(M5)) +
+  geom_boxplot()
 
 ```
 
@@ -773,6 +779,9 @@ ggcoef_compare(model = list("Stunted" = glm_stunted, "Wasted" = glm_wasted, "Und
 )
 ```
 
+# MICE models unweighted
+
+```{r MICE models unweighted}
 ```{r Model comparison MICE Pooled unweighted}
 # Comparing Models for Stunting, Wasting, and Underweight with or without pooling and MICE
 ## Stunting  
@@ -805,6 +814,10 @@ modelsummary((pool(MICE_model_underweight)),
   coef_rename = T
 )
 
+#Based on the how_many)imputations package based on Von Hippel we need about 150 imputations
+how_many_imputations(MICE_model_stunt)
+how_many_imputations(MICE_model_wast)
+how_many_imputations(MICE_model_underweight)
 
 # Comparison of MICE Models
 ## MICE models
