@@ -472,7 +472,7 @@ table1_underweight = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + H7 + V481
 table1_underweight
 ```
 
-# Exploring Missing values
+# Exploring and handling missing values
 
 ```{r investigating missing data}
 # Investigating missing data
@@ -536,11 +536,13 @@ DHS_children_sub %>%
 # We followed the two-step recipe for imputation from von Hippel (2018) to determine the number of imputations needed for our data. The two-step recipe is as follows:
 #   1. Carry out a pilot analysis. Impute the data using a convenient number of imputations. (20 imputations is a reasonable default, if it doesn’t take too long.) Estimate the FMI by analyzing the imputed data.
 #   2. Plug the estimated FMI into the formula above to figure out how many imputations you need to achieve a certain value of CV(SE). If you need more imputations than you had in the pilot, then add those imputations and analyze the data again.
+# https://statisticalhorizons.com/how-many-imputations/
 
 ## Create a predictor matrix for imputation
 pred_mat = quickpred(DHS_children_sub, mincor = 0.25)
 
 ## Two-step recipe for imputation, first we do a pilot analysis with 20 imputations and then we calculate the number of imputations needed (see # MICE models unweighted))
+### MaxIt already converged at 5 iterations
 DHS_children_sub_multimp <- mice(DHS_children_sub, 
   m = 150, 
   predictorMatrix = pred_mat, 
@@ -852,7 +854,7 @@ DHS_children_sub_multimp_weighted <- mice::mice(DHS_children_sub,
   predictorMatrix= pm, 
   method= meth, 
   imputationWeights = DHS_children_sub$v005, 
-  m=20, 
+  m=56, 
   maxit = 5, 
   set.seed = 123) 
 
