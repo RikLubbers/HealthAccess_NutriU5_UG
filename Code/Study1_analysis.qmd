@@ -107,11 +107,11 @@ DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Ph
     V505, H7
 )
 
-
+C:\Users\Rik\OneDrive\PhD_Undernutrition_Uganda_Physical_Accessbility\1_Study_1_Physical_access\Data\DATA\Uganda Full\Travel_Time
 # Load the travel time data from an Excel file
-## Depending on computer    "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Analyses/Travel_time.xls"
+## Depending on computer    "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"
 ##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"   
-Travel_time_clust = read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Analyses/Travel_time.xls",      
+Travel_time_clust = read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls",      
   col_names = TRUE)
 
 
@@ -578,7 +578,7 @@ DHS_children_sub_weighted <- svydesign(
 
 ## GLM weighted not imputed
 
-## GLM stunting weighted not imputed
+### GLM stunting weighted not imputed
 
 ```{r GLM stunting weighted not imputed}    
 # Generalized Linear Model for Stunting (HW5)
@@ -638,9 +638,9 @@ vif(glm_stunted)
 ggcoef_model(glm_stunted)
 ```
 
-## GLM underweight
+### GLM underweight weighted not imputed
 
-```{r GLM underweight}
+```{r GLM underweight weighted not imputed}
 # Generalized Linear Model for Underweight (HW8)
 ## Initial GLM with all potential predictors
 glm_underweight = svyglm(formula = HW8 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
@@ -691,9 +691,9 @@ vif(glm_underweight)
 ggcoef_model(glm_underweight)
 ```
 
-## GLM wasting
+### GLM wasting weighted not imputed 
 
-```{r GLM wasting}
+```{r GLM wasting weighted not imputed}
 # Generalized Linear Model for Wasting (HW11)
 ## Initial GLM with all potential predictors
 glm_wasted = svyglm(formula = HW11 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
@@ -744,7 +744,7 @@ vif(glm_wasted)
 ggcoef_model(glm_wasted)
 ```
 
-## Model comparison
+### Model comparison
 
 ```{r Model comparison}
 # Comparing Models for Stunting, Wasting, and Underweight
@@ -781,7 +781,6 @@ ggcoef_compare(model = list("Stunted" = glm_stunted, "Wasted" = glm_wasted, "Und
 
 # MICE models unweighted
 
-```{r MICE models unweighted}
 ```{r Model comparison MICE Pooled unweighted}
 # Comparing Models for Stunting, Wasting, and Underweight with or without pooling and MICE
 ## Stunting  
@@ -814,10 +813,12 @@ modelsummary((pool(MICE_model_underweight)),
   coef_rename = T
 )
 
-#Based on the how_many)imputations package based on Von Hippel we need about 150 imputations
+# Based on the how_many)imputations package based on Von Hippel we need about 150 imputations
 how_many_imputations(MICE_model_stunt)
 how_many_imputations(MICE_model_wast)
 how_many_imputations(MICE_model_underweight)
+
+
 
 # Comparison of MICE Models
 ## MICE models
