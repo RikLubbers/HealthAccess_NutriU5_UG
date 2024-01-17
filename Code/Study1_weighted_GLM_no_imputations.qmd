@@ -3,7 +3,7 @@
 # Differences will be found with the unweighted MICE procedure, but that is to be expected due to throwing away almost 80% of our sample.
 # By refraining from using this approach, we avoid introducing multiple types of bias into our analysis.
 
-# This code can be copied to Study1_analysis to analyze the dataset.
+# This code can be copied to Study1_analysis to analyze the dataset using this approach.
 
 # Creating survey weights
 

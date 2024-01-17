@@ -1,11 +1,5 @@
----
-title: "Study1_Code"
-author: "Rik Lubbers"
-#format: docx
-editor: visual
-editor_options: 
-  chunk_output_type: console
----
+# This code is for data exploration in Study 1.
+# It aims to describe and visualize the data collected in Study 1 using R.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.show='hide', eval=FALSE)
