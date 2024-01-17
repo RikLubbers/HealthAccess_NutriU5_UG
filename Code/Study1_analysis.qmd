@@ -1,11 +1,7 @@
----
-title: "Study1_Code"
-author: "Rik Lubbers"
-#format: docx
-editor: visual
-editor_options: 
-  chunk_output_type: console
----
+
+# Analysis for Study 1
+# This code performs the analysis using MICE with unweighted PMM
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.show='hide', eval=FALSE)
@@ -36,7 +32,6 @@ install_missing_packages <- function(packages) {
 
 ##Check and install missing packages
 install_missing_packages(required_packages)
-
 
 # Load the installed packages
 library(tidyverse)
