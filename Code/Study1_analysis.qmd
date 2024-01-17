@@ -88,7 +88,7 @@ library(howManyImputations)
 ## depending on computer  "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 ##                        "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 
-DHS_children_sub <- read_sav("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
+DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
   dplyr::select(
     CASEID,
     V001, V005,
@@ -111,7 +111,7 @@ DHS_children_sub <- read_sav("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Acc
 # Load the travel time data from an Excel file
 ## Depending on computer    "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Analyses/Travel_time.xls"
 ##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"   
-Travel_time_clust = read_xls("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls" ,      
+Travel_time_clust = read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Analyses/Travel_time.xls",      
   col_names = TRUE)
 
 
@@ -549,10 +549,6 @@ DHS_children_sub_multimp <- mice(DHS_children_sub,
   set.seed = 123, 
   method = "pmm"
 )
-
-## Generate the completed dataset after imputation
-DHS_children_sub <- mice::complete(DHS_children_sub_multimp)
-
 # Check the quality of imputations by visualizing imputed data distribution
 ## Density plot for all variables
 ggmice(DHS_children_sub_multimp, aes(M5)) +
@@ -560,7 +556,7 @@ ggmice(DHS_children_sub_multimp, aes(M5)) +
 
 ```
 
-# Applying survey weights
+# Creating survey weights
 
 ```{r survey weights}
 # Apply survey weights to the dataset
@@ -580,9 +576,11 @@ DHS_children_sub_weighted <- svydesign(
 
 # Statistical testing
 
-## GLM stunting
+## GLM weighted not imputed
 
-```{r GLM stunting}
+## GLM stunting weighted not imputed
+
+```{r GLM stunting weighted not imputed}    
 # Generalized Linear Model for Stunting (HW5)
 ## Initial GLM with all potential predictors
 glm_stunted = svyglm(formula = HW5 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
