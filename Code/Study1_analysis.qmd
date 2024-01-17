@@ -818,8 +818,6 @@ how_many_imputations(MICE_model_stunt)
 how_many_imputations(MICE_model_wast)
 how_many_imputations(MICE_model_underweight)
 
-
-
 # Comparison of MICE Models
 ## MICE models
 MICEmodels = modelsummary(list(MICE_model_stunt, MICE_model_wast, MICE_model_underweight), 
