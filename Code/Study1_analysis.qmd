@@ -542,7 +542,7 @@ DHS_children_sub %>%
 pred_mat = quickpred(DHS_children_sub, mincor = 0.25)
 
 ## Two-step recipe for imputation, first we do a pilot analysis with 20 imputations and then we calculate the number of imputations needed (see # MICE models unweighted))
-### MaxIt already converged at 5 iterations
+### MaxIt already converged at 5 iterations so no need to increase the number of iterations
 DHS_children_sub_multimp <- mice(DHS_children_sub, 
   m = 150, 
   predictorMatrix = pred_mat, 
