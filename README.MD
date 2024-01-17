@@ -87,7 +87,7 @@ To download the code and data in this repository, you can either:
 
 Once you have downloaded the repository, you can open the R project file (`PhD-Code.Rproj`) in RStudio and run the code in the various R scripts.
 
-Note that not all the data used in this study is publicly available due to licensing. For an overview of all the datasets see [here](https://github.com/RikLubbers/PhD-Code/blob/main/Study_1/DATA/Data_overview.md). The data that is publicly available can be downloaded from the links provided in the file. The data that is not publicly available can be requested from the respective sources as listed.
+Note that not all the data used in this study is publicly available due to licensing. For an overview of all the datasets see [here](https://github.com/RikLubbers/PhD-Code/blob/main/Study_1/Data_and_Documentation/Data_overview.md). The data that is publicly available can be downloaded from the links provided in the file. The data that is not publicly available can be requested from the respective sources as listed.
 
 #### Important Note on AccessMod
 It's essential to mention that the usage of AccessMod in this project does not allow for a fully reproducible workflow. AccessMod is an external tool that requires manual input and customization based on data. While the code provided can reproduce the models given the travel time data, the travel time data itself cannot be reproduced without manual input.
