@@ -19,7 +19,7 @@ required_packages <- c(
   "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
   "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
   "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
-  "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations"
+  "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations", "gridExtra"
 )
 
 ## Function to check and install missing packages
@@ -73,6 +73,7 @@ library(httpgd)
 library(miceadds)
 library(ggmice)
 library(howManyImputations)
+library(gridExtra)
 ```
 
 # Data handling
@@ -471,7 +472,35 @@ ggmice(DHS_children_sub_multimp, aes(M5)) +
   geom_boxplot()
 
 ```
+# Descriptives
 
+```{r descriptives}
+# Create a boxplot to visualize the relationship between region and travel time
+# Define the colors vector
+pastel_colors <- c(
+  "#FFD1DC", "#AED6F1", "#ABEBC6", "#D2B4DE", "#F9E79F",
+  "#FAD7A0", "#FDEDEC", "#A2D9CE", "#FFC3A0", "#B2BABB",
+  "#F7DC6F", "#C39BD3", "#FFABAB", "#AED6F1", "#D5DBDB"
+)
+region_plot = ggplot(DHS_children_sub, aes(x = reorder(V024, travel_time, median), y = travel_time, fill = V024)) +
+  geom_boxplot() +
+  scale_x_discrete(name = "Region", labels = scales::wrap_format(10)) +
+  scale_y_continuous(breaks = seq(0, max(DHS_children_sub$travel_time), by = 25), labels = scales::comma_format()) +
+  labs(y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
+  ggtitle("Distribution of Travel Time by Region for DHS Household Clusters") +
+  scale_fill_manual(values = pastel_colors) + # Use the custom color scale
+  theme_minimal() +
+  guides(fill = FALSE) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), # Increase size for plot title
+    axis.title = element_text(size = 14), # Increase size for axis titles
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12, face = "bold"), # Increase size for x axis text
+    axis.text.y = element_text(size = 12), # Increase size for y axis text
+    plot.caption = element_text(size = 10) # Increase size for caption
+  )
+
+region_plot
+```
 # Statistical testing
 ## MICE models unweighted
 
