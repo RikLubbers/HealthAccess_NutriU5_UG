@@ -541,14 +541,24 @@ DHS_children_sub_weighted <- svydesign(
 # Visualizing travel time per cluster in categories
 ## Bar plot of travel time categories
 ggplot(Travel_time_clust) +
-  aes(x = travel_time_cat) +
-  geom_bar(fill = '#00bfc4') +
+  aes(x = travel_time_cat, fill = travel_time_cat) +
+  geom_bar(color = "black") +
+  scale_fill_manual(values = c("#77dd77", "#c3f0c8", "#fdae7e", "#ffb3a7")) + 
   labs(title = "Travel Time per Household Cluster in Categories", x = "Travel Time Categories") +
+  guides(fill = FALSE) +
   theme_light() +
-  geom_text(stat='count', aes(label = paste0("N = ", ..count..)), vjust = 2) +
-  geom_text(aes(label = scales::percent(..count.. / 677)), stat = "count", vjust = 4)
+  labs(y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
+  theme(
+    text = element_text(size = 20),
+    plot.title = element_text(size = 25, face = "bold"),
+    axis.title.x = element_text(size = 25),
+    axis.title.y = element_text(size = 25),
+    axis.text.x = element_text(size = 20),
+    axis.text.y = element_text(size = 20)
+  ) +
+  geom_text(stat = 'count', aes(label = paste0("N = ", ..count..)), vjust = 2, size = 8) +
+  geom_text(stat = 'count', aes(label = scales::percent(..count.. / 677)), vjust = 3.5, size = 8)
 
-## Bar plot of travel time categories by urban/rural type
 ggplot(Travel_time_clust) +
   aes(x = travel_time_cat, fill = URBAN_RURA) +
   scale_fill_manual(values = c('#00bfc4', '#f9766c'), 
@@ -558,10 +568,48 @@ ggplot(Travel_time_clust) +
   labs(title = "Travel Time per Type of Household Cluster in Categories", 
        x = "Travel Time Categories", 
        y = 'Proportion') +
-  theme_light()
+  theme_light() +
+  labs(y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
+  theme(
+    text = element_text(size = 20),
+    plot.title = element_text(size = 25, face = "bold"),
+    axis.title.x = element_text(size = 25),
+    axis.title.y = element_text(size = 25),
+    axis.text.x = element_text(size = 20),
+    axis.text.y = element_text(size = 20),
+    legend.position = "bottom"
+  )
+
+
 
 ## Perform a chi-squared test on the travel time categories and urban/rural type
 chisq.test(Travel_time_clust$travel_time_cat, Travel_time_clust$URBAN_RURA)
+
+# Create a boxplot to visualize the relationship between region and travel time
+# Define the colors vector
+pastel_colors <- c(
+  "#FFD1DC", "#AED6F1", "#ABEBC6", "#D2B4DE", "#F9E79F",
+  "#FAD7A0", "#FDEDEC", "#A2D9CE", "#FFC3A0", "#B2BABB",
+  "#F7DC6F", "#C39BD3", "#FFABAB", "#AED6F1", "#D5DBDB"
+)
+region_plot = ggplot(DHS_children_sub, aes(x = reorder(V024, travel_time, median), y = travel_time, fill = V024)) +
+  geom_boxplot() +
+  scale_x_discrete(name = "Region", labels = scales::wrap_format(10)) +
+  scale_y_continuous(breaks = seq(0, max(DHS_children_sub$travel_time), by = 25), labels = scales::comma_format()) +
+  labs(y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
+  ggtitle("Distribution of Travel Time by Region for DHS Household Clusters") +
+  scale_fill_manual(values = pastel_colors) + # Use the custom color scale
+  theme_minimal() +
+  guides(fill = FALSE) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 20, face = "bold"), # Increase size for plot title
+    axis.title = element_text(size = 14), # Increase size for axis titles
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12, face = "bold"), # Increase size for x axis text
+    axis.text.y = element_text(size = 12), # Increase size for y axis text
+    plot.caption = element_text(size = 10) # Increase size for caption
+  )
+
+region_plot
 
 
 # Histograms and bar plots for outcome variables (stunting, underweight, wasting, and severe acute malnutrition)
