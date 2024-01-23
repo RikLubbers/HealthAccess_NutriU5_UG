@@ -17,7 +17,7 @@ required_packages <- c(
   "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
   "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
   "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
-  "languageserver", "httpgd"
+  "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations", "gridExtra"
 )
 
 ## Function to check and install missing packages
@@ -30,7 +30,6 @@ install_missing_packages <- function(packages) {
 
 ##Check and install missing packages
 install_missing_packages(required_packages)
-
 
 # Load the installed packages
 library(tidyverse)
@@ -69,6 +68,10 @@ library(mice)
 library(gtsummary)
 library(languageserver)
 library(httpgd)
+library(miceadds)
+library(ggmice)
+library(howManyImputations)
+library(gridExtra)
 ```
 
 # Data handling
@@ -79,7 +82,7 @@ library(httpgd)
 ## depending on computer  "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 ##                        "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 
-DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
+DHS_children_sub <- read_sav("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
   dplyr::select(
     CASEID,
     V001, V005,
@@ -102,7 +105,7 @@ DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Ph
 # Load the travel time data from an Excel file
 ## Depending on computer    "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Analyses/Travel_time.xls"
 ##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"   
-Travel_time_clust = read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls" , col_names = TRUE)
+Travel_time_clust = read_xls("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls" , col_names = TRUE)
 
 
 # Merge the children dataset with the travel time data using the common column "V001" in both datasets
@@ -385,40 +388,41 @@ DHS_children_sub = DHS_children_sub %>% drop_na(HW5)
 ```{r table 1}
 # Creating Tables 1 for stunting, underweight, and wasting
 ## Custom function to calculate p-values for group differences
-pvalue <- function(x, ...) {
-    # Construct vectors of data y and groups (strata) g
-    y <- unlist(x)
-    g <- factor(rep(1:length(x), times=sapply(x, length)))
-    if (is.numeric(y)) {
-        # For numeric variables, perform a standard 2-sample t-test
-        p <- t.test(y ~ g)$p.value
-    } else {
-        # For categorical variables, perform a chi-squared test of independence
-        p <- chisq.test(table(y, g))$p.value
-    }
-    # Format the p-value, using an HTML entity for the less-than sign.
-    # The initial empty string places the output on the line below the variable label.
-    c("", sub("<", "&lt;", format.pval(p, digits=3, eps=0.001)))
+# Define a custom function to calculate significance stars
+signif_stars <- function(x, ...) {
+    # Perform statistical tests (e.g., t-test or chi-squared test) and get p-values
+    # ...
+
+    # Convert p-values to stars
+    stars <- ifelse(p < 0.001, "***", ifelse(p < 0.01, "**", ifelse(p < 0.05, "*", "")))
+    return(stars)
 }
 
+# Calculate Table 1 for stunting with significance stars
+table1_stunted <- table1(
+  ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW5_cat,
+  data = DHS_children_sub,
+  topclass = "Rtable1-zebra",
+  overall = FALSE,
+  split.cells = TRUE,
+  extra.col = list(`***` = signif_stars)
+)
 
-# Stunting
-## Calculate Table 1 for stunting
-table1_stunted = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + H7 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + travel_time | HW5_cat, data=DHS_children_sub, topclass="Rtable1-zebra")
-
-## Calculate group differences for stunting
-table1_stunted = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + H7 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + travel_time | HW5_cat, data=DHS_children_sub, topclass="Rtable1-zebra", extra.col=list(`P-value`=pvalue), overall=F)
-
-## Display the stunting Table 1
+# Display the modified stunting Table 1
 table1_stunted
-
 
 # Wasting
 ## Calculate Table 1 for wasting
-table1_wasted = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + H7 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + travel_time | HW11_cat, data=DHS_children_sub, topclass="Rtable1-zebra")
+table1_wasted = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW11_cat, data=DHS_children_sub, topclass="Rtable1-zebra")
 
 ## Calculate group differences for wasting
-table1_wasted = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + H7 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + travel_time | HW11_cat, data=DHS_children_sub, topclass="Rtable1-zebra", extra.col=list(`P-value`=pvalue), overall=F)
+table1_wasted = table1(
+  ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW11_cat, 
+  data=DHS_children_sub, 
+  topclass="Rtable1-zebra", 
+  extra.col=list(`P-value`=signif_stars), 
+  overall=F
+)
 
 ## Display the wasting Table 1
 table1_wasted
@@ -426,13 +430,21 @@ table1_wasted
 
 # Underweight
 ## Calculate Table 1 for underweight
-table1_underweight = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + H7 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + travel_time | HW8_cat, data=DHS_children_sub, topclass="Rtable1-zebra")
+table1_underweight = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW8_cat, data=DHS_children_sub, topclass="Rtable1-zebra")
 
 ## Calculate group differences for underweight
-table1_underweight = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + H7 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + travel_time | HW8_cat, data=DHS_children_sub, topclass="Rtable1-zebra", extra.col=list(`P-value`=pvalue), overall=F)
+table1_underweight = table1(
+  ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW8_cat, data=DHS_children_sub, 
+  topclass="Rtable1-zebra", 
+  extra.col=list(`P-value`=signif_stars), 
+  overall=F
+)
 
 ## Display the underweight Table 1
 table1_underweight
+
+table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time, data=DHS_children_sub) 
+
 ```
 
 # Exploring Missing values
