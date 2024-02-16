@@ -9,7 +9,7 @@
 | 5  | Administrative boundaries    | Administrative boundaries             | Vector polygons | Arc_1960_UTM_Zone_35N | [Link](https://data.humdata.org/dataset/cod-ab-uga?)                                  |
 | 7  | DHS                          | Household clusters                    | Vector points | Arc_1960_UTM_Zone_35N | [Link](https://dhsprogram.com/pubs/pdf/FR333/FR333.pdf)                                |
 | 8  | Water bodies                 | Water bodies                          | Polygons      | Arc_1960_UTM_Zone_35N | [Link](https://geoportal.icpac.net/layers/geonode:uga_water_areas_dcw)                |
-| 9  | Travel Time                  | Self-created                          | Odt. file/raster        | Arc_1960_UTM_Zone_35N | [odt_file](https://github.com/RikLubbers/PhD-Code/blob/main/Study_1/DATA/Travel_time.ods), Raster upon request                                                                            |
+| 9  | Travel Time                  | Self-created                          | Odt. file/raster        | Arc_1960_UTM_Zone_35N | [odt_file](https://github.com/RikLubbers/PhD-Code/blob/main/Study_1/DATA/Data_and_Documentation/Travel_time.ods), Raster upon request                                                                            |
 
 ## Data Usage
 
