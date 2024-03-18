@@ -45,4 +45,3 @@
 | Built up areas                                       | 5              |
 | Regularly flooded areas or aquatic vegetation       | 1              |
 | Open Water                                           | 0              |
-

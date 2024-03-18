@@ -8,7 +8,7 @@ This repository contains the code for the first study of my PhD research in the 
 
 ## Table of Contents
 
-- [Study Title](#physical-accessibility-to-public-healthcare-facilities-and-undernutrition-in-children-under-5-in-uganda)
+- [Study Title](physical-accessibility-to-public-healthcare-facilities-and-undernutrition-in-children-under-5-in-uganda)
   - [Description](#description)
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
@@ -22,6 +22,7 @@ This repository contains the code for the first study of my PhD research in the 
 ### Prerequisites
 
 #### Software
+
 - [R](https://www.r-project.org/) (version 4.0.3 or higher)
 - [RStudio](https://rstudio.com/) (version 1.4.1106 or higher) or any other IDE for R
 - [Git](https://git-scm.com/) (version 2.30.0 or higher)
@@ -30,6 +31,7 @@ This repository contains the code for the first study of my PhD research in the 
 - [Access Mod 5](https://www.accessmod.org/) (version 5.0.0 or higher)
 
 #### R packages
+
 The code is written in R and requires multiple packages. They are listed below:
 
     ```r
@@ -90,16 +92,17 @@ Once you have downloaded the repository, you can open the R project file (`PhD-C
 Note that not all the data used in this study is publicly available due to licensing. For an overview of all the datasets see [here](https://github.com/RikLubbers/PhD-Code/blob/main/Study_1/Data_and_Documentation/Data_overview.md). The data that is publicly available can be downloaded from the links provided in the file. The data that is not publicly available can be requested from the respective sources as listed.
 
 #### Important Note on AccessMod
+
 It's essential to mention that the usage of AccessMod in this project does not allow for a fully reproducible workflow. AccessMod is an external tool that requires manual input and customization based on data. While the code provided can reproduce the models given the travel time data, the travel time data itself cannot be reproduced without manual input.
 
 ## Contributing
 
 You are welcome to contribute to this project by submitting bug reports, suggesting improvements, or sending pull requests. However, it is advisable to first contact the project owner, Rik Lubbers, at [r.u.lubbers@rug.nl](mailto:r.u.lubbers@rug.nl) or [r.u.lubbers@umcg.nl](mailto:r.u.lubbers@umcg.nl) to discuss your ideas or changes before making any contributions. Please feel free to contribute to the discussion board as well.
 
-Your contributions are highly appreciated and can help make this project better. Please follow the guidelines and best practices for contributing outlined in the [CONTRIBUTING.md](https://github.com/RikLubbers/PhD-Code/blob/main/CONTRIBUTING.md) file.
+Your contributions are highly appreciated and can help make this project better. Please follow the guidelines and best practices for contributing outlined in the [CONTRIBUTING.md](https://github.com/RikLubbers/HealthAccess_NutriU5_UG/blob/4f03fbe93490262967f4b1f9b1142eff9e4036d4/CONTRIBUTING.md) file.
 
 ## License
 
-Please refer to the [LICENSE.txt](https://github.com/RikLubbers/PhD-Code/blob/main/LICENSE.txt) file in the top directory for details.
+Please refer to the [LICENSE.txt](https://github.com/RikLubbers/HealthAccess_NutriU5_UG/blob/4f03fbe93490262967f4b1f9b1142eff9e4036d4/LICENSE.txt) file in the top directory for details.
 
 ---
