@@ -101,6 +101,20 @@ You are welcome to contribute to this project by submitting bug reports, suggest
 
 Your contributions are highly appreciated and can help make this project better. Please follow the guidelines and best practices for contributing outlined in the [CONTRIBUTING.md](https://github.com/RikLubbers/HealthAccess_NutriU5_UG/blob/4f03fbe93490262967f4b1f9b1142eff9e4036d4/CONTRIBUTING.md) file.
 
+## Contact
+
+If you have any questions or would like to collaborate or discuss any aspect of my research, feel free to reach out to me:
+
+- Rik Lubbers
+
+- Email: <r.u.lubbers@rug.nl>/r.u.lubbers@umcg.nl
+- LinkedIn: <https://www.linkedin.com/in/rik-lubbers>
+- ORCID ID: <https://orcid.org/0000-0002-2772-1524>
+- ResearchGate: <https://www.researchgate.net/profile/Rik-Lubbers>
+- CV: <https://github.com/RikLubbers/mywebsite/raw/main/assets/CV.pdf>
+- GitHub: <https://github.com/RikLubbers>
+- University of Groningen: <https://www.rug.nl/staff/r.u.lubbers/> or <https://research.rug.nl/nl/persons/rik-lubbers>
+
 ## License
 
 Please refer to the [LICENSE.txt](https://github.com/RikLubbers/HealthAccess_NutriU5_UG/blob/4f03fbe93490262967f4b1f9b1142eff9e4036d4/LICENSE.txt) file in the top directory for details.
