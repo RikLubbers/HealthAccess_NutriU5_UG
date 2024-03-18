@@ -84,7 +84,7 @@ library(gridExtra)
 ## depending on computer  "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 ##                        "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 
-DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
+DHS_children_sub <- read_sav("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
   dplyr::select(
     CASEID,
     V001, V005,
@@ -103,11 +103,10 @@ DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Ph
     V505, H7
 )
 
-C:\Users\Rik\OneDrive\PhD_Undernutrition_Uganda_Physical_Accessbility\1_Study_1_Physical_access\Data\DATA\Uganda Full\Travel_Time
 # Load the travel time data from an Excel file
 ## Depending on computer    "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"
 ##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"   
-Travel_time_clust = read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls",      
+Travel_time_clust = read_xls("D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls",      
   col_names = TRUE)
 
 
@@ -389,62 +388,6 @@ DHS_children_sub = subset(DHS_children_sub, B5 == 1)
 DHS_children_sub = DHS_children_sub %>% drop_na(HW5)
 ```
 
-# Exploring missing values
-
-```{r investigating missing data}
-# Investigating missing data
-## Calculate the proportion of missing values for each variable
-prop_miss(DHS_children_sub)
-
-## Count the number of missing values for each variable
-n_miss(DHS_children_sub)
-
-## Summary of missing values by variable
-miss_var_summary(DHS_children_sub)
-
-## Summary of missing values by case
-miss_case_summary(DHS_children_sub)
-
-## Create a table showing patterns of missing data
-miss_case_table(DHS_children_sub)
-
-## Visualize missing data
-vis_miss(DHS_children_sub) + theme(axis.text.x = element_text(angle=80))
-
-gg_miss_upset(DHS_children_sub)
-
-## Define dependent and explanatory variables for missing data analysis
-dependent1 = "HW5"
-dependent2 = "HW8"
-dependent3 = "HW11"
-explanatory = c("V149", "V729", "V191", "V212", "V445", "V714", "B4", "BORD", "M19", "B11", "H11", "V113", "V136", "H7", "V481", "H22", "V505", "travel_time")
-
-## Create missing data plots for dependent1, dependent2, and dependent3
-missing_plot(DHS_children_sub, dependent1, explanatory)
-missing_plot(DHS_children_sub, dependent2, explanatory)
-missing_plot(DHS_children_sub, dependent3, explanatory)
-
-## Generate summary tables for missing data
-missing1 = ff_glimpse(DHS_children_sub, dependent1, explanatory)
-flextable(missing1$Continuous) #%>%
-  save_as_image("missing_cont.png")
-flextable(missing1$Categorical) #%>%
-  save_as_image("missing_cat.png")
-
-ff_glimpse(DHS_children_sub, dependent2, explanatory)
-ff_glimpse(DHS_children_sub, dependent3, explanatory)
-
-## Create missing data pair plots for dependent1, dependent2, and dependent3
-DHS_children_sub %>%
-  missing_pairs(dependent1, explanatory, position = "fill")
-
-DHS_children_sub %>%
-  missing_pairs(dependent2, explanatory, position = "fill")
-
-DHS_children_sub %>%
-  missing_pairs(dependent3, explanatory, position = "fill")
-```
-
 # Imputing missing data
 
 ```{r imputing missing data}
@@ -458,7 +401,7 @@ DHS_children_sub %>%
 ## Create a predictor matrix for imputation
 pred_mat = quickpred(DHS_children_sub, mincor = 0.25)
 
-## Two-step recipe for imputation, first we do a pilot analysis with 20 imputations and then we calculate the number of imputations needed (see # MICE models unweighted))
+## Two-step recipe for imputation, first we do a pilot analysis with 20 imputations and then we calculate the number of imputations needed (see # MICE models unweighted below))
 ### MaxIt already converged at 5 iterations so no need to increase the number of iterations
 DHS_children_sub_multimp <- mice(DHS_children_sub, 
   m = 150, 
@@ -466,6 +409,7 @@ DHS_children_sub_multimp <- mice(DHS_children_sub,
   set.seed = 123, 
   method = "pmm"
 )
+
 # Check the quality of imputations by visualizing imputed data distribution
 ## Density plot for all variables
 ggmice(DHS_children_sub_multimp, aes(M5)) +
@@ -476,8 +420,8 @@ ggmice(DHS_children_sub_multimp, aes(M5)) +
 # Statistical testing
 ## MICE models unweighted
 
-```{r Model comparison MICE Pooled unweighted}
-# Comparing Models for Stunting, Wasting, and Underweight with or without pooling and MICE
+```{r MICE Pooled unweighted}
+# Models for Stunting, Wasting, and Underweight using MICE
 ## Stunting  
 MICE_model_stunt = with(DHS_children_sub_multimp, 
   lm(HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,)
@@ -540,22 +484,4 @@ modelsummary(pool(MICE_model_underweight),
 how_many_imputations(MICE_model_stunt)
 how_many_imputations(MICE_model_wast)
 how_many_imputations(MICE_model_underweight)
-
-# Comparison of MICE Models
-## MICE models
-MICEmodels = modelsummary(list(MICE_model_stunt, MICE_model_wast, MICE_model_underweight), 
-  coef_omit = "^(?!trav)", 
-  gof_omit = ".*",
-  conf_level = 0.95,
-  fmt = fmt_decimal(digits = 5, pdigits = 3),
-  statistic = c("p-value: {p.value}", "95%-CI : {conf.int}"),
-  notes = "All estimates for travel time are based on pooled data from multiple imputation analysis and are corrected for other covariates.", 
-  col.names = c("", "Stunting", "Wasting", "Underweight"),
-  coef_map = c('travel_time' = 'Travel time in minutes')
-)
-
-## Display the model summary
-
-MICEmodels
-
 ```
