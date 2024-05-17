@@ -6,9 +6,9 @@
 
 ```{r}
 # empty imputation
-imp0 <- mice::mice(DHS_children_sub, 
-    maxit=0, 
-    meth="pmm"
+imp0 <- mice::mice(DHS_children_sub,
+    maxit = 0,
+    meth = "pmm"
 )
 
 # redefine imputation methods
@@ -20,57 +20,60 @@ pm <- imp0$predictorMatrix
 pm[, 1:3] <- 0
 
 # do imputation
-DHS_children_sub_multimp_weighted <- mice::mice(DHS_children_sub, 
-    predictorMatrix = pm, 
-    method = meth, 
-    imputationWeights = DHS_children_sub$v005, 
-    m = 56, 
-    maxit = 5, 
+DHS_children_sub_multimp_weighted <- mice::mice(DHS_children_sub,
+    predictorMatrix = pm,
+    method = meth,
+    imputationWeights = DHS_children_sub$v005,
+    m = 56,
+    maxit = 5,
     set.seed = 123
-) 
+)
 
 # Model creation
-## Stunting  
-MICE_model_stunt_weight <- with(DHS_children_sub_multimp_weighted, 
+## Stunting
+MICE_model_stunt_weight <- with(
+    DHS_children_sub_multimp_weighted,
     lm(HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time)
 )
 
 modelsummary(
-    (pool(MICE_model_stunt_weight)), 
-    stars = TRUE, 
+    (pool(MICE_model_stunt_weight)),
+    stars = TRUE,
     coef_rename = TRUE
 )
 
 ## Wasting
-MICE_model_wast_weight <- with(DHS_children_sub_multimp_weighted, 
-    lm(HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,)
+MICE_model_wast_weight <- with(
+    DHS_children_sub_multimp_weighted,
+    lm(HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time, )
 )
 
 modelsummary(
-    (pool(MICE_model_wast_weight)), 
-    stars = TRUE, 
+    (pool(MICE_model_wast_weight)),
+    stars = TRUE,
     coef_rename = TRUE
 )
 
 ## Underweight
-MICE_model_underweight_weight <- 
-    with(DHS_children_sub_multimp_weighted, 
-    lm(HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,)
-)
+MICE_model_underweight_weight <-
+    with(
+        DHS_children_sub_multimp_weighted,
+        lm(HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time, )
+    )
 
 modelsummary(
-    (pool(MICE_model_underweight_weight)), 
-    stars = TRUE, 
+    (pool(MICE_model_underweight_weight)),
+    stars = TRUE,
     coef_rename = TRUE
 )
 
 # Comparison of Weighted MICE Models
-MICEmodels_weight <- 
-    modelsummary(list(MICE_model_stunt_weight, MICE_model_wast_weight, MICE_model_underweight_weight), 
-    stars = TRUE, 
-    coef_rename = TRUE, 
-    col.names = c("", "Stunting", "Wasting", "Underweight")
-)
+MICEmodels_weight <-
+    modelsummary(list(MICE_model_stunt_weight, MICE_model_wast_weight, MICE_model_underweight_weight),
+        stars = TRUE,
+        coef_rename = TRUE,
+        col.names = c("", "Stunting", "Wasting", "Underweight")
+    )
 
 print(MICEmodels_weight)
 ```

@@ -2,9 +2,9 @@
 # It aims to describe and visualize the data collected in Study 1 using R.
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.show='hide', eval=FALSE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.show = "hide", eval = FALSE)
 
-#fig.show='hide', eval=FALSE
+# fig.show='hide', eval=FALSE
 ```
 
 # Loading packages
@@ -12,23 +12,23 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.show='hide', eval=FALSE)
 ```{r package loading}
 # List of required packages
 required_packages <- c(
-  "NCmisc", "tidyverse", "haven", "lattice", "data.table", "knitr", "survey",
-  "expss", "labelled", "table1", "readxl", "GGally", "kableExtra", "xtable",
-  "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
-  "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
-  "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
-  "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations", "gridExtra"
+    "NCmisc", "tidyverse", "haven", "lattice", "data.table", "knitr", "survey",
+    "expss", "labelled", "table1", "readxl", "GGally", "kableExtra", "xtable",
+    "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
+    "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
+    "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
+    "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations", "gridExtra"
 )
 
 ## Function to check and install missing packages
 install_missing_packages <- function(packages) {
-  missing_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
-  if (length(missing_packages) > 0) {
-    install.packages(missing_packages, dependencies = TRUE)
-  }
+    missing_packages <- packages[!(packages %in% installed.packages()[, "Package"])]
+    if (length(missing_packages) > 0) {
+        install.packages(missing_packages, dependencies = TRUE)
+    }
 }
 
-##Check and install missing packages
+## Check and install missing packages
 install_missing_packages(required_packages)
 
 # Load the installed packages
@@ -38,7 +38,7 @@ library(lattice)
 library(data.table)
 library(knitr)
 library(survey)
-  options(survey.lonely.psu = "adjust")
+options(survey.lonely.psu = "adjust")
 library(expss)
 library(labelled)
 library(table1)
@@ -78,42 +78,42 @@ library(gridExtra)
 ## Loading data and creating subset
 
 ```{r Data load and subsetting}
-# Load the children dataset from a .SAV file 
+# Load the children dataset from a .SAV file
 ## depending on computer  "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 ##                        "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 
-DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>% 
-  dplyr::select(
-    CASEID,
-    V001, V005,
-    V023, V024,
-    V149, V729,
-    V191, V212,
-    V445, V714,
-    BIDX, B0, B4,
-    B5,   BORD,
-    HW5,  HW8,
-    HW11, M19,
-    B11,  H11,
-    V113, M5,
-    V136,
-    V481, H22,
-    V505, H7
-  )
+DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>%
+    dplyr::select(
+        CASEID,
+        V001, V005,
+        V023, V024,
+        V149, V729,
+        V191, V212,
+        V445, V714,
+        BIDX, B0, B4,
+        B5, BORD,
+        HW5, HW8,
+        HW11, M19,
+        B11, H11,
+        V113, M5,
+        V136,
+        V481, H22,
+        V505, H7
+    )
 
 
 # Load the travel time data from an Excel file
 ## Depending on computer    "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/TraveL_Time/Travel_time.xls"
-##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"   
-Travel_time_clust = read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/TraveL_Time/Travel_time.xls" , col_names = TRUE)
+##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"
+Travel_time_clust <- read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/TraveL_Time/Travel_time.xls", col_names = TRUE)
 
 
 # Merge the children dataset with the travel time data using the common column "V001" in both datasets
-DHS_children_sub = merge(DHS_children_sub, Travel_time_clust, by.x = "V001", by.y = "DHSCLUST")
+DHS_children_sub <- merge(DHS_children_sub, Travel_time_clust, by.x = "V001", by.y = "DHSCLUST")
 
 
 # Convert the NEAR_DIST column from meters to kilometers
-DHS_children_sub$NEAR_DIST = DHS_children_sub$NEAR_DIST/1000
+DHS_children_sub$NEAR_DIST <- DHS_children_sub$NEAR_DIST / 1000
 ```
 
 ## Removing unnecessary SPSS metadata
@@ -137,65 +137,65 @@ DHS_children_sub <- zap_label(DHS_children_sub)
 ```{r missing data}
 # Replace specific values with NA (missing data) in various columns
 ## For column HW5, replace 9998 and 9999 with NA
-DHS_children_sub$HW5[DHS_children_sub$HW5 == 9998] = NA
-DHS_children_sub$HW5[DHS_children_sub$HW5 == 9999] = NA
+DHS_children_sub$HW5[DHS_children_sub$HW5 == 9998] <- NA
+DHS_children_sub$HW5[DHS_children_sub$HW5 == 9999] <- NA
 
 ## For column HW8, replace 9998 and 9999 with NA
-DHS_children_sub$HW8[DHS_children_sub$HW8 == 9998] = NA
-DHS_children_sub$HW8[DHS_children_sub$HW8 == 9999] = NA
+DHS_children_sub$HW8[DHS_children_sub$HW8 == 9998] <- NA
+DHS_children_sub$HW8[DHS_children_sub$HW8 == 9999] <- NA
 
 ## For column HW11, replace 9998 and 9999 with NA
-DHS_children_sub$HW11[DHS_children_sub$HW11 == 9998] = NA
-DHS_children_sub$HW11[DHS_children_sub$HW11 == 9999] = NA
+DHS_children_sub$HW11[DHS_children_sub$HW11 == 9998] <- NA
+DHS_children_sub$HW11[DHS_children_sub$HW11 == 9999] <- NA
 
 ## For column V149, replace 9 with NA
-DHS_children_sub$V149[DHS_children_sub$V149 == 9] = NA
+DHS_children_sub$V149[DHS_children_sub$V149 == 9] <- NA
 
 ## For column V729, replace 9 with NA
-DHS_children_sub$V729[DHS_children_sub$V729 == 9] = NA
+DHS_children_sub$V729[DHS_children_sub$V729 == 9] <- NA
 
 ## For column V445, replace 9998 and 9999 with NA
-DHS_children_sub$V445[DHS_children_sub$V445 == 9998] = NA
-DHS_children_sub$V445[DHS_children_sub$V445 == 9999] = NA
+DHS_children_sub$V445[DHS_children_sub$V445 == 9998] <- NA
+DHS_children_sub$V445[DHS_children_sub$V445 == 9999] <- NA
 
 ## For column V714, replace 9 with NA
-DHS_children_sub$V714[DHS_children_sub$V714 == 9] = NA
+DHS_children_sub$V714[DHS_children_sub$V714 == 9] <- NA
 
 ## For column M19, replace 9996, 9998, and 9999 with NA
-DHS_children_sub$M19[DHS_children_sub$M19 == 9996] = NA
-DHS_children_sub$M19[DHS_children_sub$M19 == 9998] = NA
-DHS_children_sub$M19[DHS_children_sub$M19 == 9999] = NA
+DHS_children_sub$M19[DHS_children_sub$M19 == 9996] <- NA
+DHS_children_sub$M19[DHS_children_sub$M19 == 9998] <- NA
+DHS_children_sub$M19[DHS_children_sub$M19 == 9999] <- NA
 
 ## For column H11, replace 8 and 9 with NA
-DHS_children_sub$H11[DHS_children_sub$H11 == 8] = NA
-DHS_children_sub$H11[DHS_children_sub$H11 == 9] = NA
+DHS_children_sub$H11[DHS_children_sub$H11 == 8] <- NA
+DHS_children_sub$H11[DHS_children_sub$H11 == 9] <- NA
 
 ## For column M5, replace 93, 94, 97, 98, and 99 with NA
-DHS_children_sub$M5[DHS_children_sub$M5 == 93] = NA
-DHS_children_sub$M5[DHS_children_sub$M5 == 94] = NA
-DHS_children_sub$M5[DHS_children_sub$M5 == 97] = NA
-DHS_children_sub$M5[DHS_children_sub$M5 == 98] = NA
-DHS_children_sub$M5[DHS_children_sub$M5 == 99] = NA
+DHS_children_sub$M5[DHS_children_sub$M5 == 93] <- NA
+DHS_children_sub$M5[DHS_children_sub$M5 == 94] <- NA
+DHS_children_sub$M5[DHS_children_sub$M5 == 97] <- NA
+DHS_children_sub$M5[DHS_children_sub$M5 == 98] <- NA
+DHS_children_sub$M5[DHS_children_sub$M5 == 99] <- NA
 
 ## For column V113, replace 99, 97, and 96 with NA
-DHS_children_sub$V113[DHS_children_sub$V113 == 99] = NA
-DHS_children_sub$V113[DHS_children_sub$V113 == 97] = NA
-DHS_children_sub$V113[DHS_children_sub$V113 == 96] = NA
+DHS_children_sub$V113[DHS_children_sub$V113 == 99] <- NA
+DHS_children_sub$V113[DHS_children_sub$V113 == 97] <- NA
+DHS_children_sub$V113[DHS_children_sub$V113 == 96] <- NA
 
 ## For column H7, replace 8 and 9 with NA
-DHS_children_sub$H7[DHS_children_sub$H7 == 8] = NA
-DHS_children_sub$H7[DHS_children_sub$H7 == 9] = NA
+DHS_children_sub$H7[DHS_children_sub$H7 == 8] <- NA
+DHS_children_sub$H7[DHS_children_sub$H7 == 9] <- NA
 
 ## For column V481, replace 9 with NA
-DHS_children_sub$V481[DHS_children_sub$V481 == 9] = NA
+DHS_children_sub$V481[DHS_children_sub$V481 == 9] <- NA
 
 ## For column H22, replace 8 and 9 with NA
-DHS_children_sub$H22[DHS_children_sub$H22 == 8] = NA
-DHS_children_sub$H22[DHS_children_sub$H22 == 9] = NA
+DHS_children_sub$H22[DHS_children_sub$H22 == 8] <- NA
+DHS_children_sub$H22[DHS_children_sub$H22 == 9] <- NA
 
 ## For column V505, replace 98 and 99 with NA
-DHS_children_sub$V505[DHS_children_sub$V505 == 98] = NA
-DHS_children_sub$V505[DHS_children_sub$V505 == 99] = NA
+DHS_children_sub$V505[DHS_children_sub$V505 == 98] <- NA
+DHS_children_sub$V505[DHS_children_sub$V505 == 99] <- NA
 ```
 
 ## Recoding variables
@@ -203,173 +203,185 @@ DHS_children_sub$V505[DHS_children_sub$V505 == 99] = NA
 ```{r recoding}
 # Transforming variables into more interpretable formats
 ## Birth interval: Dichotomize into more or less than 24 months
-DHS_children_sub$B11 = ifelse(DHS_children_sub$B11 >= 24, 0, 1)
+DHS_children_sub$B11 <- ifelse(DHS_children_sub$B11 >= 24, 0, 1)
 
 ## Combined diarrhea in the last 24 hours and 2 weeks into one category
-DHS_children_sub$H11 = ifelse(DHS_children_sub$H11 == 0, 0, 1)
+DHS_children_sub$H11 <- ifelse(DHS_children_sub$H11 == 0, 0, 1)
 
 ## Recode source of drinking water into simplified categories
-DHS_children_sub$V113 = expss::recode(DHS_children_sub$V113, 
-  11 %thru% 14 ~ 1, 21 ~ 2, 31 %thru% 32 ~ 3, 41 %thru% 43 ~ 4, 51 ~ 5, 63 ~ 6, 71 ~ 6)
-
-## Convert the variables into factors
-DHS_children_sub$B11 = factor(DHS_children_sub$B11,
-  levels = c(0, 1),
-  labels = c("Birth interval more than 24 months", "Birth interval less than 24 months")
+DHS_children_sub$V113 <- expss::recode(
+    DHS_children_sub$V113,
+    11 %thru% 14 ~ 1, 21 ~ 2, 31 %thru% 32 ~ 3, 41 %thru% 43 ~ 4, 51 ~ 5, 63 ~ 6, 71 ~ 6
 )
 
-DHS_children_sub$H11 = factor(DHS_children_sub$H11,
-  levels = c(0, 1),
-  labels = c("No diarrhea in the last 2 weeks", "Had diarrhea in the last 2 weeks")
+## Convert the variables into factors
+DHS_children_sub$B11 <- factor(DHS_children_sub$B11,
+    levels = c(0, 1),
+    labels = c("Birth interval more than 24 months", "Birth interval less than 24 months")
+)
+
+DHS_children_sub$H11 <- factor(DHS_children_sub$H11,
+    levels = c(0, 1),
+    labels = c("No diarrhea in the last 2 weeks", "Had diarrhea in the last 2 weeks")
 )
 
 ## Recode the sex of the child
-DHS_children_sub$B4 = ifelse(DHS_children_sub$B4 == 1, 0, 1) %>% factor(levels = c(0, 1), labels = c("Male","Female"))
+DHS_children_sub$B4 <- ifelse(DHS_children_sub$B4 == 1, 0, 1) %>% factor(levels = c(0, 1), labels = c("Male", "Female"))
 
 ## Create a factor for twin births
-DHS_children_sub$B0 = factor(DHS_children_sub$B0, levels = c(0:3),
-  labels = c("Single Birth", "1st of multiple", "2nd of multiple", "3rd of multiple"))
+DHS_children_sub$B0 <- factor(DHS_children_sub$B0,
+    levels = c(0:3),
+    labels = c("Single Birth", "1st of multiple", "2nd of multiple", "3rd of multiple")
+)
 
 ## Recode DPT 3 into yes and no answers and make it a factor
-DHS_children_sub$H7 = ifelse(DHS_children_sub$H7 == 0, 0, 1)
-DHS_children_sub$H7 = factor(DHS_children_sub$H7, 
-  levels = c(0, 1), 
-  labels = c("No have not received", "Yes, received DPT 3")
+DHS_children_sub$H7 <- ifelse(DHS_children_sub$H7 == 0, 0, 1)
+DHS_children_sub$H7 <- factor(DHS_children_sub$H7,
+    levels = c(0, 1),
+    labels = c("No have not received", "Yes, received DPT 3")
 )
 
 ## Set other variables as factors
-DHS_children_sub$V149 = factor(DHS_children_sub$V149, 
-  levels = c(0, 1, 2, 3, 4, 5), 
-  labels = c("No education", "Incomplete Primary", "Complete primary", "Incomplete secondary", "Complete secondary", "Higher")
+DHS_children_sub$V149 <- factor(DHS_children_sub$V149,
+    levels = c(0, 1, 2, 3, 4, 5),
+    labels = c("No education", "Incomplete Primary", "Complete primary", "Incomplete secondary", "Complete secondary", "Higher")
 )
 
-DHS_children_sub$V729 = factor(DHS_children_sub$V729, 
-  levels = c(0, 1, 2, 3, 4, 5), 
-  labels = c("No education", "Incomplete Primary", "Complete primary", "Incomplete secondary", "Complete secondary", "Higher")
+DHS_children_sub$V729 <- factor(DHS_children_sub$V729,
+    levels = c(0, 1, 2, 3, 4, 5),
+    labels = c("No education", "Incomplete Primary", "Complete primary", "Incomplete secondary", "Complete secondary", "Higher")
 )
 
-DHS_children_sub$V714 = factor(DHS_children_sub$V714, 
-  levels = c(0, 1), 
-  labels = c("Not working", "Currently working")
+DHS_children_sub$V714 <- factor(DHS_children_sub$V714,
+    levels = c(0, 1),
+    labels = c("Not working", "Currently working")
 )
 
-DHS_children_sub$V113 = factor(DHS_children_sub$V113, 
-  levels = c(1, 2, 3, 4, 5, 6), 
-  labels = c("Piped Water", "Tube Well Water", "Dug Well (Open/Protected", "Surface from Spring", "Rainwater", "Other")
+DHS_children_sub$V113 <- factor(DHS_children_sub$V113,
+    levels = c(1, 2, 3, 4, 5, 6),
+    labels = c("Piped Water", "Tube Well Water", "Dug Well (Open/Protected", "Surface from Spring", "Rainwater", "Other")
 )
 
-DHS_children_sub$V481 = factor(DHS_children_sub$V481, 
-  levels = c(0, 1), 
-  labels = c("No", "Yes")
+DHS_children_sub$V481 <- factor(DHS_children_sub$V481,
+    levels = c(0, 1),
+    labels = c("No", "Yes")
 )
 
-DHS_children_sub$H22 = factor(DHS_children_sub$H22, 
-  levels = c(0, 1), 
-  labels = c("No", "Yes")
+DHS_children_sub$H22 <- factor(DHS_children_sub$H22,
+    levels = c(0, 1),
+    labels = c("No", "Yes")
 )
 
 ## Scaling certain variables for better interpretation
-DHS_children_sub$HW5 = DHS_children_sub$HW5 / 100
-DHS_children_sub$HW8 = DHS_children_sub$HW8 / 100
-DHS_children_sub$HW11 = DHS_children_sub$HW11 / 100
-DHS_children_sub$V445 = DHS_children_sub$V445 / 100
-DHS_children_sub$V191 = DHS_children_sub$V191 / 1000
+DHS_children_sub$HW5 <- DHS_children_sub$HW5 / 100
+DHS_children_sub$HW8 <- DHS_children_sub$HW8 / 100
+DHS_children_sub$HW11 <- DHS_children_sub$HW11 / 100
+DHS_children_sub$V445 <- DHS_children_sub$V445 / 100
+DHS_children_sub$V191 <- DHS_children_sub$V191 / 1000
 
 ## Create categorical variables for stunting, underweight, wasting, severe acute malnutrition, region, and travel time
-DHS_children_sub$HW5_cat = ifelse(DHS_children_sub$HW5 >= -2, 0, 1) %>% 
-  factor(levels = c(0, 1), 
-  labels = c("Not stunted", "Stunted")
-)
+DHS_children_sub$HW5_cat <- ifelse(DHS_children_sub$HW5 >= -2, 0, 1) %>%
+    factor(
+        levels = c(0, 1),
+        labels = c("Not stunted", "Stunted")
+    )
 
-DHS_children_sub$HW8_cat = ifelse(DHS_children_sub$HW8 >= -2, 0, 1) %>% 
-  factor(levels = c(0, 1), 
-  labels = c("Not underweight", "Underweight")
-)
+DHS_children_sub$HW8_cat <- ifelse(DHS_children_sub$HW8 >= -2, 0, 1) %>%
+    factor(
+        levels = c(0, 1),
+        labels = c("Not underweight", "Underweight")
+    )
 
-DHS_children_sub$HW11_cat = ifelse(DHS_children_sub$HW11 >= -2, 0, 1) %>% 
-  factor(levels = c(0, 1), 
-  labels = c("Not wasted", "Wasted")
-)
+DHS_children_sub$HW11_cat <- ifelse(DHS_children_sub$HW11 >= -2, 0, 1) %>%
+    factor(
+        levels = c(0, 1),
+        labels = c("Not wasted", "Wasted")
+    )
 
-DHS_children_sub$SAM = ifelse(DHS_children_sub$HW11 >= -3, 0, 1) %>% 
-  factor(levels = c(0, 1), 
-  labels = c("Not SAM", "SAM")
-)
+DHS_children_sub$SAM <- ifelse(DHS_children_sub$HW11 >= -3, 0, 1) %>%
+    factor(
+        levels = c(0, 1),
+        labels = c("Not SAM", "SAM")
+    )
 
-DHS_children_sub$V024 = factor(DHS_children_sub$V024,
-  levels = c(0:14),
-  labels = c("Kampala", "South Buganda", "North Buganda", "Busoga", "Bukedi", "Bugisu", "Teso", "Karamoja", "Lango", "Acholi", "West Nile", "Bunyoro", "Tooro", "Ankole", "Kigezi")
+DHS_children_sub$V024 <- factor(DHS_children_sub$V024,
+    levels = c(0:14),
+    labels = c("Kampala", "South Buganda", "North Buganda", "Busoga", "Bukedi", "Bugisu", "Teso", "Karamoja", "Lango", "Acholi", "West Nile", "Bunyoro", "Tooro", "Ankole", "Kigezi")
 )
 
 ## Rename the Travel time variable
-DHS_children_sub = dplyr::rename(DHS_children_sub, travel_time = raster_travel_time_Lower_travel_time_V1)
+DHS_children_sub <- dplyr::rename(DHS_children_sub, travel_time = raster_travel_time_Lower_travel_time_V1)
 
 ## Create a categorical variable for travel time
-DHS_children_sub$travel_time_cat = expss::recode(DHS_children_sub$travel_time, 
-  0 %thru% 30 ~ 1, 
-  31 %thru% 60 ~ 2, 
-  61 %thru% 120 ~ 3, 
-  121 %thru% 999 ~ 4
-) %>% 
-  factor(levels = c(1, 2, 3, 4), 
-  labels = c("30 min. or less", "30 - 60 min.", "1 -2 hours", "More than 2 hours")
-)
+DHS_children_sub$travel_time_cat <- expss::recode(
+    DHS_children_sub$travel_time,
+    0 %thru% 30 ~ 1,
+    31 %thru% 60 ~ 2,
+    61 %thru% 120 ~ 3,
+    121 %thru% 999 ~ 4
+) %>%
+    factor(
+        levels = c(1, 2, 3, 4),
+        labels = c("30 min. or less", "30 - 60 min.", "1 -2 hours", "More than 2 hours")
+    )
 
-Travel_time_clust$travel_time_cat = expss::recode(Travel_time_clust$raster_travel_time_Lower_travel_time_V1, 
-  0 %thru% 30 ~ 1, 
-  31 %thru% 60 ~ 2, 
-  61 %thru% 120 ~ 3, 
-  121 %thru% 999 ~ 4
-) %>% 
-  factor(levels = c(1, 2, 3, 4), 
-  labels = c("< 30 min.", "30 - 60 min.", "1 -2 hours", ">2 hours")
-)
+Travel_time_clust$travel_time_cat <- expss::recode(
+    Travel_time_clust$raster_travel_time_Lower_travel_time_V1,
+    0 %thru% 30 ~ 1,
+    31 %thru% 60 ~ 2,
+    61 %thru% 120 ~ 3,
+    121 %thru% 999 ~ 4
+) %>%
+    factor(
+        levels = c(1, 2, 3, 4),
+        labels = c("< 30 min.", "30 - 60 min.", "1 -2 hours", ">2 hours")
+    )
 ```
 
 ## Providing labels
 
 ```{r providing labels}
 # Assigning variable labels to the dataset
-var_lab(DHS_children_sub$V001) = "Cluster number"
-var_lab(DHS_children_sub$V005) = "Women's individual sample weight"
-var_lab(DHS_children_sub$V023) = "Stratification used in sample design"
-var_lab(DHS_children_sub$BORD) = "Birth order"
-var_lab(DHS_children_sub$V149) = "Educational attainment of the mother"
-var_lab(DHS_children_sub$V729) = "Educational attainment of the father"  
-var_lab(DHS_children_sub$V191) = "Wealth index"
-var_lab(DHS_children_sub$V212) = "Age of respondent at first birth"
-var_lab(DHS_children_sub$V445) = "BMI of mother (kg/m^2)"
-var_lab(DHS_children_sub$V714) = "Work status of mother"
-var_lab(DHS_children_sub$B4)   = "Sex of child"
-var_lab(DHS_children_sub$HW5)  = "Stunting (continious)"
-var_lab(DHS_children_sub$HW8)  = "Underweight (continious)"  
-var_lab(DHS_children_sub$HW11) = "Wasting (continious)"
-var_lab(DHS_children_sub$V024) = "Region"
-var_lab(DHS_children_sub$M19)  = "Birth weight in grams"
-var_lab(DHS_children_sub$M5)   = "Duration of breastfeeding"
-var_lab(DHS_children_sub$V113) = "Source of drinking water"
-var_lab(DHS_children_sub$V136) = "Number of household members"
-var_lab(DHS_children_sub$V481) = "Covered by health insurance"
-var_lab(DHS_children_sub$H22)  = "Fever last two weeks"
-var_lab(DHS_children_sub$V505) = "Number of other wives"
-var_lab(DHS_children_sub$V714) = "Mother is currently working"
-var_lab(DHS_children_sub$V729) = "Education of father/partner"
-var_lab(DHS_children_sub$V024) = "Region of residence"
-var_lab(DHS_children_sub$SAM)  = "SAM categorical"
-var_lab(DHS_children_sub$V149) = "Education of mother"
-var_lab(DHS_children_sub$B4)   = "Sex"
-var_lab(DHS_children_sub$H11)  = "Had diarrhea in the last two weeks"
-var_lab(DHS_children_sub$B11)  = "Preceding birth interval <=24"
-var_lab(DHS_children_sub$B0)   = "Child is twin"
-var_lab(DHS_children_sub$HW11_cat) = "Wasted categorical"
-var_lab(DHS_children_sub$HW8_cat)  = "Underweight categorical"
-var_lab(DHS_children_sub$HW5_cat)  = "Stunting categorical"
-var_lab(DHS_children_sub$travel_time) = "Travel Time in min."
-var_lab(DHS_children_sub$URBAN_RURA) = "Cluster type urban/rural"
-var_lab(DHS_children_sub$NEAR_DIST)  = "Distance to nearest HC facility in km."
-var_lab(DHS_children_sub$H7)  = "Child has received DPT3 vaccination"
-var_lab(DHS_children_sub$travel_time_cat) = "Travel Time Categorical"
-var_lab(Travel_time_clust$travel_time_cat) = "Travel Time Categorical"
+var_lab(DHS_children_sub$V001) <- "Cluster number"
+var_lab(DHS_children_sub$V005) <- "Women's individual sample weight"
+var_lab(DHS_children_sub$V023) <- "Stratification used in sample design"
+var_lab(DHS_children_sub$BORD) <- "Birth order"
+var_lab(DHS_children_sub$V149) <- "Educational attainment of the mother"
+var_lab(DHS_children_sub$V729) <- "Educational attainment of the father"
+var_lab(DHS_children_sub$V191) <- "Wealth index"
+var_lab(DHS_children_sub$V212) <- "Age of respondent at first birth"
+var_lab(DHS_children_sub$V445) <- "BMI of mother (kg/m^2)"
+var_lab(DHS_children_sub$V714) <- "Work status of mother"
+var_lab(DHS_children_sub$B4) <- "Sex of child"
+var_lab(DHS_children_sub$HW5) <- "Stunting (continious)"
+var_lab(DHS_children_sub$HW8) <- "Underweight (continious)"
+var_lab(DHS_children_sub$HW11) <- "Wasting (continious)"
+var_lab(DHS_children_sub$V024) <- "Region"
+var_lab(DHS_children_sub$M19) <- "Birth weight in grams"
+var_lab(DHS_children_sub$M5) <- "Duration of breastfeeding"
+var_lab(DHS_children_sub$V113) <- "Source of drinking water"
+var_lab(DHS_children_sub$V136) <- "Number of household members"
+var_lab(DHS_children_sub$V481) <- "Covered by health insurance"
+var_lab(DHS_children_sub$H22) <- "Fever last two weeks"
+var_lab(DHS_children_sub$V505) <- "Number of other wives"
+var_lab(DHS_children_sub$V714) <- "Mother is currently working"
+var_lab(DHS_children_sub$V729) <- "Education of father/partner"
+var_lab(DHS_children_sub$V024) <- "Region of residence"
+var_lab(DHS_children_sub$SAM) <- "SAM categorical"
+var_lab(DHS_children_sub$V149) <- "Education of mother"
+var_lab(DHS_children_sub$B4) <- "Sex"
+var_lab(DHS_children_sub$H11) <- "Had diarrhea in the last two weeks"
+var_lab(DHS_children_sub$B11) <- "Preceding birth interval <=24"
+var_lab(DHS_children_sub$B0) <- "Child is twin"
+var_lab(DHS_children_sub$HW11_cat) <- "Wasted categorical"
+var_lab(DHS_children_sub$HW8_cat) <- "Underweight categorical"
+var_lab(DHS_children_sub$HW5_cat) <- "Stunting categorical"
+var_lab(DHS_children_sub$travel_time) <- "Travel Time in min."
+var_lab(DHS_children_sub$URBAN_RURA) <- "Cluster type urban/rural"
+var_lab(DHS_children_sub$NEAR_DIST) <- "Distance to nearest HC facility in km."
+var_lab(DHS_children_sub$H7) <- "Child has received DPT3 vaccination"
+var_lab(DHS_children_sub$travel_time_cat) <- "Travel Time Categorical"
+var_lab(Travel_time_clust$travel_time_cat) <- "Travel Time Categorical"
 ```
 
 ## Removing invalid data
@@ -377,10 +389,10 @@ var_lab(Travel_time_clust$travel_time_cat) = "Travel Time Categorical"
 ```{r removing invalid data}
 # Removing invalid data
 ## Filter out rows with children who are no longer alive (B5 == 1)
-DHS_children_sub = subset(DHS_children_sub, B5 == 1)
+DHS_children_sub <- subset(DHS_children_sub, B5 == 1)
 
 ## Keep only children with anthropometric measurements (non-missing HW5 values)
-DHS_children_sub = DHS_children_sub %>% drop_na(HW5)
+DHS_children_sub <- DHS_children_sub %>% drop_na(HW5)
 ```
 
 # Creating table 1
@@ -400,12 +412,12 @@ signif_stars <- function(x, ...) {
 
 # Calculate Table 1 for stunting with significance stars
 table1_stunted <- table1(
-  ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW5_cat,
-  data = DHS_children_sub,
-  topclass = "Rtable1-zebra",
-  overall = FALSE,
-  split.cells = TRUE,
-  extra.col = list(`***` = signif_stars)
+    ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW5_cat,
+    data = DHS_children_sub,
+    topclass = "Rtable1-zebra",
+    overall = FALSE,
+    split.cells = TRUE,
+    extra.col = list(`***` = signif_stars)
 )
 
 # Display the modified stunting Table 1
@@ -413,15 +425,15 @@ table1_stunted
 
 # Wasting
 ## Calculate Table 1 for wasting
-table1_wasted = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW11_cat, data=DHS_children_sub, topclass="Rtable1-zebra")
+table1_wasted <- table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW11_cat, data = DHS_children_sub, topclass = "Rtable1-zebra")
 
 ## Calculate group differences for wasting
-table1_wasted = table1(
-  ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW11_cat, 
-  data=DHS_children_sub, 
-  topclass="Rtable1-zebra", 
-  extra.col=list(`P-value`=signif_stars), 
-  overall=F
+table1_wasted <- table1(
+    ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW11_cat,
+    data = DHS_children_sub,
+    topclass = "Rtable1-zebra",
+    extra.col = list(`P-value` = signif_stars),
+    overall = F
 )
 
 ## Display the wasting Table 1
@@ -430,20 +442,21 @@ table1_wasted
 
 # Underweight
 ## Calculate Table 1 for underweight
-table1_underweight = table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW8_cat, data=DHS_children_sub, topclass="Rtable1-zebra")
+table1_underweight <- table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW8_cat, data = DHS_children_sub, topclass = "Rtable1-zebra")
 
 ## Calculate group differences for underweight
-table1_underweight = table1(
-  ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW8_cat, data=DHS_children_sub, 
-  topclass="Rtable1-zebra", 
-  extra.col=list(`P-value`=signif_stars), 
-  overall=F
+table1_underweight <- table1(
+    ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time | HW8_cat,
+    data = DHS_children_sub,
+    topclass = "Rtable1-zebra",
+    extra.col = list(`P-value` = signif_stars),
+    overall = F
 )
 
 ## Display the underweight Table 1
 table1_underweight
 
-table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time, data=DHS_children_sub) 
+table1(~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time, data = DHS_children_sub)
 
 ```
 
@@ -467,15 +480,15 @@ miss_case_summary(DHS_children_sub)
 miss_case_table(DHS_children_sub)
 
 ## Visualize missing data
-vis_miss(DHS_children_sub) + theme(axis.text.x = element_text(angle=80))
+vis_miss(DHS_children_sub) + theme(axis.text.x = element_text(angle = 80))
 
 gg_miss_upset(DHS_children_sub)
 
 ## Define dependent and explanatory variables for missing data analysis
-dependent1 = "HW5"
-dependent2 = "HW8"
-dependent3 = "HW11"
-explanatory = c("V149", "V729", "V191", "V212", "V445", "V714", "B4", "BORD", "M19", "B11", "H11", "V113", "V136", "H7", "V481", "H22", "V505", "travel_time")
+dependent1 <- "HW5"
+dependent2 <- "HW8"
+dependent3 <- "HW11"
+explanatory <- c("V149", "V729", "V191", "V212", "V445", "V714", "B4", "BORD", "M19", "B11", "H11", "V113", "V136", "H7", "V481", "H22", "V505", "travel_time")
 
 ## Create missing data plots for dependent1, dependent2, and dependent3
 missing_plot(DHS_children_sub, dependent1, explanatory)
@@ -483,24 +496,24 @@ missing_plot(DHS_children_sub, dependent2, explanatory)
 missing_plot(DHS_children_sub, dependent3, explanatory)
 
 ## Generate summary tables for missing data
-missing1 = ff_glimpse(DHS_children_sub, dependent1, explanatory)
-flextable(missing1$Continuous) #%>%
-  save_as_image("missing_cont.png")
-flextable(missing1$Categorical) #%>%
-  save_as_image("missing_cat.png")
+missing1 <- ff_glimpse(DHS_children_sub, dependent1, explanatory)
+flextable(missing1$Continuous) # %>%
+save_as_image("missing_cont.png")
+flextable(missing1$Categorical) # %>%
+save_as_image("missing_cat.png")
 
 ff_glimpse(DHS_children_sub, dependent2, explanatory)
 ff_glimpse(DHS_children_sub, dependent3, explanatory)
 
 ## Create missing data pair plots for dependent1, dependent2, and dependent3
 DHS_children_sub %>%
-  missing_pairs(dependent1, explanatory, position = "fill")
+    missing_pairs(dependent1, explanatory, position = "fill")
 
 DHS_children_sub %>%
-  missing_pairs(dependent2, explanatory, position = "fill")
+    missing_pairs(dependent2, explanatory, position = "fill")
 
 DHS_children_sub %>%
-  missing_pairs(dependent3, explanatory, position = "fill")
+    missing_pairs(dependent3, explanatory, position = "fill")
 ```
 
 ## Imputing missing data
@@ -508,10 +521,10 @@ DHS_children_sub %>%
 ```{r imputing missing data}
 # Imputing Data using Multiple Imputation by Chained Equation (MICE)
 ## Create a predictor matrix for imputation
-pred_mat = quickpred(DHS_children_sub, mincor = 0.25)
+pred_mat <- quickpred(DHS_children_sub, mincor = 0.25)
 
 ## Perform multiple imputations (m=20) using the MICE package. used 20 imputations for replicitable SE. 2- 10 is advised but we are more liberal with 20 for reproducible SE
-DHS_children_sub_multimp <- mice(DHS_children_sub, m=20, predictorMatrix = pred_mat, set.seed = 123, method = "pmm")
+DHS_children_sub_multimp <- mice(DHS_children_sub, m = 20, predictorMatrix = pred_mat, set.seed = 123, method = "pmm")
 
 ## Generate the completed dataset after imputation
 DHS_children_sub <- mice::complete(DHS_children_sub_multimp)
@@ -525,7 +538,7 @@ densityplot(DHS_children_sub_multimp)
 densityplot(DHS_children_sub_multimp, ~H7)
 
 ## Density plot for a specific variable (e.g., H7) by imputation set
-densityplot(DHS_children_sub_multimp, ~H7 | .imp)
+densityplot(DHS_children_sub_multimp, ~ H7 | .imp)
 ```
 
 # Applying survey weights
@@ -533,16 +546,16 @@ densityplot(DHS_children_sub_multimp, ~H7 | .imp)
 ```{r survey weights}
 # Apply survey weights to the dataset
 ## Divide the weight variable by 1000000
-DHS_children_sub$V005 = DHS_children_sub$V005 / 1000000
+DHS_children_sub$V005 <- DHS_children_sub$V005 / 1000000
 
 ## Create survey weights using the svydesign function
 DHS_children_sub_weighted <- svydesign(
-  id = DHS_children_sub$V001,
-  strata = DHS_children_sub$V023,
-  weights = DHS_children_sub$V005,
-  nest = TRUE,
-  data = DHS_children_sub,
-  variables = NULL
+    id = DHS_children_sub$V001,
+    strata = DHS_children_sub$V023,
+    weights = DHS_children_sub$V005,
+    nest = TRUE,
+    data = DHS_children_sub,
+    variables = NULL
 )
 ```
 
@@ -552,55 +565,61 @@ DHS_children_sub_weighted <- svydesign(
 ```{r visualization outcome variables}
 # Visualizing travel time per cluster in categories
 ## Bar plot of travel time categories
-plot1 = ggplot(Travel_time_clust) +
-  aes(x = travel_time_cat, fill = travel_time_cat) +
-  geom_bar(color = "black") +
-  scale_fill_manual(values = c("#77dd77", "#c3f0c8", "#fdae7e", "#ffb3a7")) + 
-  labs(x = "Travel Time Categories", y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
-  guides(fill = FALSE) +
-  theme_light() +
-  theme(
-    text = element_text(size = 9, family = "Times New Roman"),
-    plot.title = element_text(size = 9, face = "bold", family = "Times New Roman"),
-    axis.title.x = element_text(size = 9, family = "Times New Roman"),
-    axis.title.y = element_text(size = 9, family = "Times New Roman"),
-    axis.text.x = element_text(size = 8, family = "Times New Roman"),
-    axis.text.y = element_text(size = 8, family = "Times New Roman")
-  ) +
-  geom_text(stat = 'count', family = "Times New Roman", aes(label = paste0("N = ", ..count..)), vjust = 2, size = 4) +
-  geom_text(stat = 'count', family = "Times New Roman", aes(label = scales::percent(..count.. / 677)), vjust = 3.5, size = 4)
+plot1 <- ggplot(Travel_time_clust) +
+    aes(x = travel_time_cat, fill = travel_time_cat) +
+    geom_bar(color = "black") +
+    scale_fill_manual(values = c("#77dd77", "#c3f0c8", "#fdae7e", "#ffb3a7")) +
+    labs(x = "Travel Time Categories", y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
+    guides(fill = FALSE) +
+    theme_light() +
+    theme(
+        text = element_text(size = 9, family = "Times New Roman"),
+        plot.title = element_text(size = 9, face = "bold", family = "Times New Roman"),
+        axis.title.x = element_text(size = 9, family = "Times New Roman"),
+        axis.title.y = element_text(size = 9, family = "Times New Roman"),
+        axis.text.x = element_text(size = 8, family = "Times New Roman"),
+        axis.text.y = element_text(size = 8, family = "Times New Roman")
+    ) +
+    geom_text(stat = "count", family = "Times New Roman", aes(label = paste0("N = ", ..count..)), vjust = 2, size = 4) +
+    geom_text(stat = "count", family = "Times New Roman", aes(label = scales::percent(..count.. / 677)), vjust = 3.5, size = 4)
 
 plot1
 
 # plot 2
 Travel_time_clust <- Travel_time_clust %>%
-  group_by(travel_time_cat, URBAN_RURA) %>%
-  summarise(count = n()) %>%
-  mutate(total = sum(count),
-         prop = count / total)
+    group_by(travel_time_cat, URBAN_RURA) %>%
+    summarise(count = n()) %>%
+    mutate(
+        total = sum(count),
+        prop = count / total
+    )
 
 # Now create the plot
 plot2 <- ggplot(Travel_time_clust, aes(x = travel_time_cat, y = prop, fill = URBAN_RURA)) +
-  geom_bar(stat = "identity", position = 'fill') +
-  geom_text(family = "Times New Roman", aes(label = scales::percent(prop)), position = position_fill(vjust = 0.5), size = 3) +
-  scale_fill_manual(values = c('#00bfc4', '#f9766c'), 
-                    name = "Type of Household Cluster",
-                    labels = c("Rural", "Urban")) +
-  labs(x = "Travel Time Categories", 
-       y = 'Proportion', 
-       caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
-  theme_light() +
-  theme(
-    text = element_text(size = 9, family = "Times New Roman"),
-    plot.title = element_text(size = 9, face = "bold", family = "Times New Roman"),
-    axis.title.x = element_text(size = 9, family = "Times New Roman"),
-    axis.title.y = element_text(size = 9, family = "Times New Roman"),
-    axis.text.x = element_text(size = 8, family = "Times New Roman"),
-    axis.text.y = element_text(size = 8, family = "Times New Roman"),
-    legend.position = "bottom",
-    legend.text = element_text(size = 8, family = "Times New Roman"),
-    legend.title = element_text(size = 9, family = "Times New Roman")
-  )
+    geom_bar(stat = "identity", position = "fill") +
+    geom_text(family = "Times New Roman", aes(label = scales::percent(prop)), position = position_fill(vjust = 0.5), size = 3) +
+    scale_fill_manual(
+        values = c("#00bfc4", "#f9766c"),
+        name = "Type of Household Cluster",
+        labels = c("Rural", "Urban")
+    ) +
+    labs(
+        x = "Travel Time Categories",
+        y = "Proportion",
+        caption = "Data source: Demographic and Health Surveys (DHS) & Authors"
+    ) +
+    theme_light() +
+    theme(
+        text = element_text(size = 9, family = "Times New Roman"),
+        plot.title = element_text(size = 9, face = "bold", family = "Times New Roman"),
+        axis.title.x = element_text(size = 9, family = "Times New Roman"),
+        axis.title.y = element_text(size = 9, family = "Times New Roman"),
+        axis.text.x = element_text(size = 8, family = "Times New Roman"),
+        axis.text.y = element_text(size = 8, family = "Times New Roman"),
+        legend.position = "bottom",
+        legend.text = element_text(size = 8, family = "Times New Roman"),
+        legend.title = element_text(size = 9, family = "Times New Roman")
+    )
 
 plot2
 
@@ -611,37 +630,41 @@ chisq.test(Travel_time_clust$travel_time_cat, Travel_time_clust$URBAN_RURA)
 # Create a boxplot to visualize the relationship between region and travel time
 # Define the colors vector
 pastel_colors <- c(
-  "#FFD1DC", "#AED6F1", "#ABEBC6", "#D2B4DE", "#F9E79F",
-  "#FAD7A0", "#FDEDEC", "#A2D9CE", "#FFC3A0", "#B2BABB",
-  "#F7DC6F", "#C39BD3", "#FFABAB", "#AED6F1", "#D5DBDB"
+    "#FFD1DC", "#AED6F1", "#ABEBC6", "#D2B4DE", "#F9E79F",
+    "#FAD7A0", "#FDEDEC", "#A2D9CE", "#FFC3A0", "#B2BABB",
+    "#F7DC6F", "#C39BD3", "#FFABAB", "#AED6F1", "#D5DBDB"
 )
 
-region_plot = ggplot(DHS_children_sub, aes(x = reorder(V024, travel_time, median), y = travel_time, fill = V024)) +
-  geom_boxplot() +
-  scale_x_discrete(name = "Region", labels = scales::wrap_format(10)) +
-  scale_y_continuous(breaks = seq(0, max(DHS_children_sub$travel_time), by = 25), labels = scales::comma_format()) +
-  labs(y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
-  scale_fill_manual(values = pastel_colors) +
-  theme_light() +
-  guides(fill = FALSE) +
-  theme(
-    text = element_text(size = 9, family = "Times New Roman"),
-    plot.title = element_text(hjust = 0.5, size = 9, face = "bold", family = "Times New Roman"), 
-    axis.title = element_text(size = 9, family = "Times New Roman"),
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 9, face = "bold", family = "Times New Roman"), 
-    axis.text.y = element_text(size = 9, family = "Times New Roman"), 
-    plot.caption = element_text(size = 8, family = "Times New Roman") 
-  )
+region_plot <- ggplot(DHS_children_sub, aes(x = reorder(V024, travel_time, median), y = travel_time, fill = V024)) +
+    geom_boxplot() +
+    scale_x_discrete(name = "Region", labels = scales::wrap_format(10)) +
+    scale_y_continuous(breaks = seq(0, max(DHS_children_sub$travel_time), by = 25), labels = scales::comma_format()) +
+    labs(y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
+    scale_fill_manual(values = pastel_colors) +
+    theme_light() +
+    guides(fill = FALSE) +
+    theme(
+        text = element_text(size = 9, family = "Times New Roman"),
+        plot.title = element_text(hjust = 0.5, size = 9, face = "bold", family = "Times New Roman"),
+        axis.title = element_text(size = 9, family = "Times New Roman"),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 9, face = "bold", family = "Times New Roman"),
+        axis.text.y = element_text(size = 9, family = "Times New Roman"),
+        plot.caption = element_text(size = 8, family = "Times New Roman")
+    )
 
 # Creating a table with median travel time per region
-mean_travel_time <- aggregate(DHS_children_sub$travel_time, 
-                by = list(Region = DHS_children_sub$V024), 
-                FUN = function(x) c(
-                  median = median(x), 
-                  lower_quartile = quantile(x, 0.25), 
-                  upper_quartile = quantile(x, 0.75), 
-                  min = min(x), 
-                  max = max(x)))
+mean_travel_time <- aggregate(DHS_children_sub$travel_time,
+    by = list(Region = DHS_children_sub$V024),
+    FUN = function(x) {
+        c(
+            median = median(x),
+            lower_quartile = quantile(x, 0.25),
+            upper_quartile = quantile(x, 0.75),
+            min = min(x),
+            max = max(x)
+        )
+    }
+)
 
 # Converting the results to a data frame with proper column names
 mean_travel_time_df <- do.call(data.frame, mean_travel_time)
@@ -660,59 +683,59 @@ ggsave("region_plot.png", region_plot, width = 19, height = 14, units = "cm", dp
 # Histograms and bar plots for outcome variables (stunting, underweight, wasting, and severe acute malnutrition)
 ## Stunting histogram
 (ggsurvey(DHS_children_sub_weighted) +
-  aes(x = HW5) +
-  geom_histogram(aes(fill = HW5 < -2)) +
-  scale_fill_manual(values = c("light green", "red"))) %>%
-  ggplotly()
+    aes(x = HW5) +
+    geom_histogram(aes(fill = HW5 < -2)) +
+    scale_fill_manual(values = c("light green", "red"))) %>%
+    ggplotly()
 
 ## Bar plot for stunting categories
 (ggsurvey(design = DHS_children_sub_weighted) +
-  aes(x = '', fill = HW5_cat) + 
-  geom_bar(position = 'fill') +
-  scale_fill_manual(values = c("light green", "red"))) %>%
-  ggplotly()
+    aes(x = "", fill = HW5_cat) +
+    geom_bar(position = "fill") +
+    scale_fill_manual(values = c("light green", "red"))) %>%
+    ggplotly()
 
 ## Cross-tabulation of stunting categories
-svytable(~DHS_children_sub$HW5_cat, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$HW5_cat, DHS_children_sub_weighted)
 
 ## Underweight histogram
 ggsurvey(DHS_children_sub_weighted) +
-  aes(x = HW8) +
-  geom_histogram(aes(fill = HW8 < -2)) +
-  scale_fill_manual(values = c("light green", "red"))
+    aes(x = HW8) +
+    geom_histogram(aes(fill = HW8 < -2)) +
+    scale_fill_manual(values = c("light green", "red"))
 
 ## Bar plot for underweight categories
 ggsurvey(design = DHS_children_sub_weighted) +
-  aes(x = '', fill = HW8_cat) + 
-  geom_bar(position = 'fill') +
-  scale_fill_manual(values = c("light green", "red"))
+    aes(x = "", fill = HW8_cat) +
+    geom_bar(position = "fill") +
+    scale_fill_manual(values = c("light green", "red"))
 
 ## Cross-tabulation of underweight categories
-svytable(~DHS_children_sub$HW8_cat, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$HW8_cat, DHS_children_sub_weighted)
 
 ## Wasting histogram
 ggsurvey(DHS_children_sub_weighted) +
-  aes(x = HW11) +
-  geom_histogram(aes(fill = HW11 < -2)) +
-  scale_fill_manual(values = c("light green", "red"))
+    aes(x = HW11) +
+    geom_histogram(aes(fill = HW11 < -2)) +
+    scale_fill_manual(values = c("light green", "red"))
 
 ## Bar plot for wasting categories
 ggsurvey(design = DHS_children_sub_weighted) +
-  aes(x = '', fill = HW11_cat) + 
-  geom_bar(position = 'fill') +
-  scale_fill_manual(values = c("light green", "red"))
+    aes(x = "", fill = HW11_cat) +
+    geom_bar(position = "fill") +
+    scale_fill_manual(values = c("light green", "red"))
 
 ## Cross-tabulation of wasting categories
-svytable(~DHS_children_sub$HW11_cat, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$HW11_cat, DHS_children_sub_weighted)
 
 ## Severe Acute Malnutrition bar plot
 ggsurvey(design = DHS_children_sub_weighted) +
-  aes(x = '', fill = SAM) + 
-  geom_bar(position = 'fill') +
-  scale_fill_manual(values = c("light green", "red"))
+    aes(x = "", fill = SAM) +
+    geom_bar(position = "fill") +
+    scale_fill_manual(values = c("light green", "red"))
 
 ## Cross-tabulation of severe acute malnutrition
-svytable(~DHS_children_sub$SAM, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$SAM, DHS_children_sub_weighted)
 ```
 
 ## Covariates
@@ -721,676 +744,676 @@ svytable(~DHS_children_sub$SAM, DHS_children_sub_weighted)
 # Visualizing covariates
 ## Nearest facility in kilometers
 (ggsurvey(DHS_children_sub_weighted) +
-  aes(x = NEAR_DIST) +
-  geom_histogram(fill = 'light blue', col = "black")
-  ) %>%
-  ggplotly() %>%
-  saveWidget("test.html")
+    aes(x = NEAR_DIST) +
+    geom_histogram(fill = "light blue", col = "black")
+) %>%
+    ggplotly() %>%
+    saveWidget("test.html")
 
 ggsurvey(DHS_children_sub_weighted) +
-  aes(x = NEAR_DIST, y = V024) +
-  geom_boxplot()
+    aes(x = NEAR_DIST, y = V024) +
+    geom_boxplot()
 
 ## Travel time in minutes
 (ggsurvey(DHS_children_sub_weighted) +
-  aes(x = travel_time)+
-  geom_histogram(fill = 'light blue', col = "black")) %>%
-  ggplotly()
+    aes(x = travel_time) +
+    geom_histogram(fill = "light blue", col = "black")) %>%
+    ggplotly()
 
 ## Region of residence
 ggsurvey(DHS_children_sub_weighted) +
-  aes(x = V024) +
-  geom_bar(fill = "light blue", col = "black")
+    aes(x = V024) +
+    geom_bar(fill = "light blue", col = "black")
 
 ## Birth Order
 ggsurvey(DHS_children_sub_weighted) +
-  aes(x = BORD) +
-  geom_bar(fill = "light blue", col = "black")
+    aes(x = BORD) +
+    geom_bar(fill = "light blue", col = "black")
 
 ## Wealth Index
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = V191)+
-  geom_histogram(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = V191) +
+    geom_histogram(fill = "light blue", col = "black")
 
 ## Age of respondent at first birth
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = V212)+
-  geom_histogram(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = V212) +
+    geom_histogram(fill = "light blue", col = "black")
 
 ## Body mass index (BMI) of mother
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = V445)+
-  geom_histogram(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = V445) +
+    geom_histogram(fill = "light blue", col = "black")
 
 ## Birth weight in kilograms
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = M19)+
-  geom_histogram(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = M19) +
+    geom_histogram(fill = "light blue", col = "black")
 
 ## Mother is currently working
-ggsurvey(design = DHS_children_sub_weighted)+
-  aes(x = '', fill = V714)+
-         geom_bar(position = 'fill')
+ggsurvey(design = DHS_children_sub_weighted) +
+    aes(x = "", fill = V714) +
+    geom_bar(position = "fill")
 
 ## Mother's educational attainment
-ggsurvey(design = DHS_children_sub_weighted)+
-  aes(x = '', fill = V149)+
-  geom_bar(position = 'fill')+
-  scale_fill_brewer(palette = "RdYlGn")
+ggsurvey(design = DHS_children_sub_weighted) +
+    aes(x = "", fill = V149) +
+    geom_bar(position = "fill") +
+    scale_fill_brewer(palette = "RdYlGn")
 
 ## Father/partners educational attainment
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = '', fill = V729)+
-  geom_bar(position = 'fill')+
-  scale_fill_brewer(palette = "RdYlGn")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = "", fill = V729) +
+    geom_bar(position = "fill") +
+    scale_fill_brewer(palette = "RdYlGn")
 
 ## Sex of child
-ggsurvey(design = DHS_children_sub_weighted)+
-  aes(x = '', fill = B4)+
-  geom_bar(position = 'fill')
+ggsurvey(design = DHS_children_sub_weighted) +
+    aes(x = "", fill = B4) +
+    geom_bar(position = "fill")
 
 ## Birth interval (more or less than 24 months)
 ggsurvey(DHS_children_sub_weighted) +
-  aes(x = '', fill = B11)+
-  geom_bar(position = 'fill') +
-  scale_fill_brewer(palette = "Dark2")
+    aes(x = "", fill = B11) +
+    geom_bar(position = "fill") +
+    scale_fill_brewer(palette = "Dark2")
 
 ## Diarrhea last two weeks
 ggsurvey(DHS_children_sub_weighted) +
-  aes(x = '', fill = H11)+
-  geom_bar(position = 'fill') +
-  scale_fill_brewer(palette = "Dark2")
+    aes(x = "", fill = H11) +
+    geom_bar(position = "fill") +
+    scale_fill_brewer(palette = "Dark2")
 
 ## Number of other wives
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = V505) +
-  geom_histogram(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = V505) +
+    geom_histogram(fill = "light blue", col = "black")
 
-svytable(~DHS_children_sub$V505, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$V505, DHS_children_sub_weighted)
 
 ## Fever last two weeks
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = H22) +
-  geom_bar(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = H22) +
+    geom_bar(fill = "light blue", col = "black")
 
-ggsurvey(design = DHS_children_sub_weighted)+
-  aes(x = '', fill = H22)+
-  geom_bar(position = 'fill')
+ggsurvey(design = DHS_children_sub_weighted) +
+    aes(x = "", fill = H22) +
+    geom_bar(position = "fill")
 
-svytable(~DHS_children_sub$H22, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$H22, DHS_children_sub_weighted)
 
 ## Covered by health insurance
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = V481) +
-  geom_bar(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = V481) +
+    geom_bar(fill = "light blue", col = "black")
 
-svytable(~DHS_children_sub$V481, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$V481, DHS_children_sub_weighted)
 
 ## Number of household members
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = V136) +
-  geom_histogram(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = V136) +
+    geom_histogram(fill = "light blue", col = "black")
 
-svytable(~DHS_children_sub$V136, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$V136, DHS_children_sub_weighted)
 
 ## Source of drinking water
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = V113) +
-  geom_bar(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = V113) +
+    geom_bar(fill = "light blue", col = "black")
 
-svytable(~DHS_children_sub$V113, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$V113, DHS_children_sub_weighted)
 
 ## Breastfeeding
-ggsurvey(DHS_children_sub_weighted)+
-  aes(x = M5) +
-  geom_bar(fill = 'light blue', col = "black")
+ggsurvey(DHS_children_sub_weighted) +
+    aes(x = M5) +
+    geom_bar(fill = "light blue", col = "black")
 
-svytable(~DHS_children_sub$M5, DHS_children_sub_weighted)
+svytable(~ DHS_children_sub$M5, DHS_children_sub_weighted)
 ```
 
 # Investigating correlation
 
 ```{r Investigating correlation visually}
 # Investigating correlation visually
-## R package that allows for the creation of plots 
+## R package that allows for the creation of plots
 esquisser()
 
 # Main interested variables
 ## Stunting by Euclidian distance to nearest HC facility
 ggsurvey(DHS_children_sub_weighted) +
-  aes (x = NEAR_DIST, y = HW5) +
-  geom_point() +
-  geom_smooth(method = loess)
+    aes(x = NEAR_DIST, y = HW5) +
+    geom_point() +
+    geom_smooth(method = loess)
 
 ggsurvey(DHS_children_sub_weighted) +
-  aes (x = HW5_cat, y = NEAR_DIST) +
-  geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
+    aes(x = HW5_cat, y = NEAR_DIST) +
+    geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
 
 ## Underweight by Euclidian distance to nearest HC facility
 ggsurvey(DHS_children_sub_weighted) +
-  aes (x = NEAR_DIST, y = HW8) +
-  geom_point()+
-  geom_smooth(method = loess)
+    aes(x = NEAR_DIST, y = HW8) +
+    geom_point() +
+    geom_smooth(method = loess)
 
 ggsurvey(DHS_children_sub_weighted) +
-  aes (x = HW8_cat, y = NEAR_DIST) +
-  geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
+    aes(x = HW8_cat, y = NEAR_DIST) +
+    geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
 
 ## Wasting by Euclidian distance to nearest HC facility
 ggsurvey(DHS_children_sub_weighted) +
-  aes (x = NEAR_DIST, y = HW11) +
-  geom_point()+
-  geom_smooth(method = loess)
+    aes(x = NEAR_DIST, y = HW11) +
+    geom_point() +
+    geom_smooth(method = loess)
 
 ggsurvey(DHS_children_sub_weighted) +
-  aes (x = HW11_cat, y = NEAR_DIST) +
-  geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
+    aes(x = HW11_cat, y = NEAR_DIST) +
+    geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
 
 ggsurvey(DHS_children_sub_weighted) +
-  aes (x = SAM, y = NEAR_DIST) +
-  geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
+    aes(x = SAM, y = NEAR_DIST) +
+    geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
 
 
 # TRAVEL TIME
 ## Stunting by traveltime to nearest HC facility
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = travel_time, y = HW5) +
-  geom_point() +
-  geom_smooth(method = loess) +
-  xlab("Travel time in min.")+
-  ylab("Stunting") +
-  ggtitle("Stunting by travel time in min.")
-) %>% 
-  ggplotly()
+    aes(x = travel_time, y = HW5) +
+    geom_point() +
+    geom_smooth(method = loess) +
+    xlab("Travel time in min.") +
+    ylab("Stunting") +
+    ggtitle("Stunting by travel time in min.")
+) %>%
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = HW5_cat, y = travel_time) +
-  geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
+    aes(x = HW5_cat, y = travel_time) +
+    geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Underweight by Travel Time to nearest HC facility
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = travel_time, y = HW8) +
-  geom_point()+
-  geom_smooth(method = loess)+
-    xlab("Travel time in min.")+
-  ylab("Underweight") +
-  ggtitle("Underweight by travel time in min.")
+    aes(x = travel_time, y = HW8) +
+    geom_point() +
+    geom_smooth(method = loess) +
+    xlab("Travel time in min.") +
+    ylab("Underweight") +
+    ggtitle("Underweight by travel time in min.")
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = HW8_cat, y = travel_time) +
-  geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
+    aes(x = HW8_cat, y = travel_time) +
+    geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Wasting by Travel Time to nearest HC facility
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = travel_time, y = HW11) +
-  geom_point()+
-  geom_smooth(method = loess)+
-    xlab("Travel time in min.")+
-  ylab("Wasting") +
-  ggtitle("Wasting by travel time in min.")
+    aes(x = travel_time, y = HW11) +
+    geom_point() +
+    geom_smooth(method = loess) +
+    xlab("Travel time in min.") +
+    ylab("Wasting") +
+    ggtitle("Wasting by travel time in min.")
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = HW11_cat, y = travel_time) +
-  geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
-) %>% 
-  ggplotly()
+    aes(x = HW11_cat, y = travel_time) +
+    geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
+) %>%
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = SAM, y = travel_time) +
-  geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
+    aes(x = SAM, y = travel_time) +
+    geom_boxplot(fill = c("Green", "red"), alpha = 0.5)
 ) %>%
-  ggplotly()
+    ggplotly()
 
 
 # Other continuous variables
 ## Wealth index
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V191, y = HW5) +
-  geom_point()+
-    geom_smooth(method = loess)+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V191, y = HW5) +
+    geom_point() +
+    geom_smooth(method = loess) +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V191, y = HW8) +
-  geom_point()+ 
+    aes(x = V191, y = HW8) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V191, y = HW11) +
-  geom_point()+
+    aes(x = V191, y = HW11) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Age of respondent at first birth
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V212, y = HW5) +
-  geom_point()+
-    geom_smooth(method = loess)+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V212, y = HW5) +
+    geom_point() +
+    geom_smooth(method = loess) +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V212, y = HW8) +
-  geom_point()+ 
+    aes(x = V212, y = HW8) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V212, y = HW11) +
-  geom_point()+
+    aes(x = V212, y = HW11) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## BMI of mother
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V445, y = HW5) +
-  geom_point()+
-    geom_smooth(method = loess)+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V445, y = HW5) +
+    geom_point() +
+    geom_smooth(method = loess) +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V445, y = HW8) +
-  geom_point()+ 
+    aes(x = V445, y = HW8) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V445, y = HW11) +
-  geom_point()+
+    aes(x = V445, y = HW11) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Birth weight
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = M19, y = HW5) +
-  geom_point()+
-    geom_smooth(method = loess)+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = M19, y = HW5) +
+    geom_point() +
+    geom_smooth(method = loess) +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = M19, y = HW8) +
-  geom_point()+ 
+    aes(x = M19, y = HW8) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = M19, y = HW11) +
-  geom_point()+
+    aes(x = M19, y = HW11) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Number of household members
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V136, y = HW5) +
-  geom_point()+
-    geom_smooth(method = loess)+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V136, y = HW5) +
+    geom_point() +
+    geom_smooth(method = loess) +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V136, y = HW8) +
-  geom_point()+ 
+    aes(x = V136, y = HW8) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V136, y = HW11) +
-  geom_point()+
+    aes(x = V136, y = HW11) +
+    geom_point() +
     geom_smooth(method = loess) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Number of other wives
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V505, y = HW5) +
-  geom_point()+
-    geom_smooth(method = lm)+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V505, y = HW5) +
+    geom_point() +
+    geom_smooth(method = lm) +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V505, y = HW8) +
-  geom_point()+ 
+    aes(x = V505, y = HW8) +
+    geom_point() +
     geom_smooth(method = lm) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V505, y = HW11) +
-  geom_point()+
+    aes(x = V505, y = HW11) +
+    geom_point() +
     geom_smooth(method = lm) +
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 
 # Categorical variables
 ## Education of the mother
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V149, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V149, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V149, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V149, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V149, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V149, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Education of the father
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V729, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V729, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V729, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V729, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V729, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V729, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Mother is currently working
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V714, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V714, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V714, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V714, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V714, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V714, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Child is twin
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B0, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B0, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B0, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B0, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B0, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B0, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Sex of the child
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B4, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B4, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B4, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B4, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B4, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B4, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Birth order
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = BORD, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = BORD, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = BORD, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = BORD, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = BORD, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = BORD, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Birth interval
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B11, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B11, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B11, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B11, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = B11, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = B11, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Diarrhea last two weeks
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H11, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H11, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H11, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H11, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H11, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H11, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Duration of breastfeeding
 X
 
 ## Source of drinking water
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V113, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V113, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V113, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V113, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V113, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V113, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Vaccination status
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H11, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H11, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H11, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H11, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H11, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H11, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Health insurance
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V481, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V481, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V481, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V481, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = V481, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = V481, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Fever last two weeks
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H22, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H22, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H22, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H22, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = H22, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = H22, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 ## Urban_rural
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = URBAN_RURA, y = HW5) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = URBAN_RURA, y = HW5) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = URBAN_RURA, y = HW8) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = URBAN_RURA, y = HW8) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 
 (ggsurvey(DHS_children_sub_weighted) +
-  aes (x = URBAN_RURA, y = HW11) +
-  geom_boxplot()+
-    scale_y_continuous(breaks=seq(-6, 6, by = 0.5)) 
+    aes(x = URBAN_RURA, y = HW11) +
+    geom_boxplot() +
+    scale_y_continuous(breaks = seq(-6, 6, by = 0.5))
 ) %>%
-  ggplotly()
+    ggplotly()
 ```
 
 ## Statistically
@@ -1402,12 +1425,14 @@ X
 ggpairs(DHS_children_sub, columns = c(6, 8, 9, 10, 11, 13, 14, 16, 17, 18, 19, 20, 23, 25, 27, 29, 37), cardinality_threshold = 17)
 
 ## Select only the numeric columns from the original dataset
-DHS_children_sub_num = select_if(DHS_children_sub, is.numeric)
+DHS_children_sub_num <- select_if(DHS_children_sub, is.numeric)
 
 ## Create a subset of the numeric data by selecting specific columns of interest
-DHS_children_sub_num = subset(DHS_children_sub_num, select = c(V191, V212, V445, HW5, HW8, HW11, M19, V136, V505, travel_time))
+DHS_children_sub_num <- subset(DHS_children_sub_num, select = c(V191, V212, V445, HW5, HW8, HW11, M19, V136, V505, travel_time))
 
 ## Generate a heatmap of the correlation matrix for the selected numeric variables
-heatmaply_cor(x = cor(na.omit(DHS_children_sub_num)), xlab = "Features",
-              ylab = "Features")
+heatmaply_cor(
+    x = cor(na.omit(DHS_children_sub_num)), xlab = "Features",
+    ylab = "Features"
+)
 ```

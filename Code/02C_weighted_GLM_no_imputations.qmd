@@ -10,16 +10,16 @@
 ```{r survey weights}
 # Apply survey weights to the dataset
 ## Divide the weight variable by 1000000
-DHS_children_sub$V005 = DHS_children_sub$V005 / 1000000
+DHS_children_sub$V005 <- DHS_children_sub$V005 / 1000000
 
 ## Create survey weights using the svydesign function
 DHS_children_sub_weighted <- svydesign(
-  id = DHS_children_sub$V001,
-  strata = DHS_children_sub$V023,
-  weights = DHS_children_sub$V005,
-  nest = TRUE,
-  data = DHS_children_sub,
-  variables = NULL
+    id = DHS_children_sub$V001,
+    strata = DHS_children_sub$V023,
+    weights = DHS_children_sub$V005,
+    nest = TRUE,
+    data = DHS_children_sub,
+    variables = NULL
 )
 ```
 
@@ -28,43 +28,47 @@ DHS_children_sub_weighted <- svydesign(
 ```{r GLM stunting weighted not imputed}    
 # Generalized Linear Model for Stunting (HW5)
 ## Initial GLM with all potential predictors
-glm_stunted = svyglm(formula = HW5 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 +  V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_stunted <- svyglm(
+    formula = HW5 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## Removing V149 and B0 due to high VIF (multicollinearity)
-glm_stunted = svyglm(formula = HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481  + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_stunted <- svyglm(
+    formula = HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## Null model (no predictors)
-glm_stuned_null = svyglm(formula = HW5 ~ 1,
-  family = gaussian(),
-  design = DHS_children_sub_weighted,
-  rescale = T
+glm_stuned_null <- svyglm(
+    formula = HW5 ~ 1,
+    family = gaussian(),
+    design = DHS_children_sub_weighted,
+    rescale = T
 )
 
 ## GLM with travel_time_cat as a predictor instead of the continuous variable
-glm_stunted = svyglm(formula = HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481  + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time_cat,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_stunted <- svyglm(
+    formula = HW5 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time_cat,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## Stepwise model selection using AIC
-glm_stunted = stepAIC(glm_stunted, 
-  direction = "both"
+glm_stunted <- stepAIC(glm_stunted,
+    direction = "both"
 )
 
 
 # Model summary and checking
-modelsummary(glm_stunted, 
-  stars = T, 
-  coef_rename = TRUE
+modelsummary(glm_stunted,
+    stars = T,
+    coef_rename = TRUE
 )
 
 summary(glm_stunted)
@@ -88,36 +92,39 @@ ggcoef_model(glm_stunted)
 ```{r GLM underweight weighted not imputed}
 # Generalized Linear Model for Underweight (HW8)
 ## Initial GLM with all potential predictors
-glm_underweight = svyglm(formula = HW8 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_underweight <- svyglm(
+    formula = HW8 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## Removing V149 and B0 due to high VIF (multicollinearity)
-glm_underweight = svyglm(formula = HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_underweight <- svyglm(
+    formula = HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## GLM with travel_time_cat as a predictor instead of continuous variable
-glm_underweight = svyglm(formula = HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time_cat,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_underweight <- svyglm(
+    formula = HW8 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time_cat,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## Stepwise model selection using AIC
-glm_underweight = stepAIC(glm_underweight, 
-direction = "both"
+glm_underweight <- stepAIC(glm_underweight,
+    direction = "both"
 )
 
 
 # Model summary and checking
-modelsummary(glm_underweight, 
-  stars = T, 
-  coef_rename = TRUE
+modelsummary(glm_underweight,
+    stars = T,
+    coef_rename = TRUE
 )
 
 summary(glm_underweight)
@@ -141,36 +148,39 @@ ggcoef_model(glm_underweight)
 ```{r GLM wasting weighted not imputed}
 # Generalized Linear Model for Wasting (HW11)
 ## Initial GLM with all potential predictors
-glm_wasted = svyglm(formula = HW11 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_wasted <- svyglm(
+    formula = HW11 ~ B4 + BORD + B0 + M19 + B11 + H11 + H22 + V481 + V149 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## Removing V149 and B0 due to high VIF (multicollinearity)
-glm_wasted = svyglm(formula = HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_wasted <- svyglm(
+    formula = HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## GLM with travel_time_cat as a predictor instead of continuous variable
-glm_wasted = svyglm(formula = HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time_cat,
-  design = DHS_children_sub_weighted,
-  family = gaussian(),
-  rescale = T
+glm_wasted <- svyglm(
+    formula = HW11 ~ B4 + BORD + M19 + B11 + H11 + H22 + V481 + V729 + V505 + V191 + V212 + V445 + V714 + V113 + V136 + M5 + H7 + travel_time_cat,
+    design = DHS_children_sub_weighted,
+    family = gaussian(),
+    rescale = T
 )
 
 ## Stepwise model selection using AIC
-glm_wasted = stepAIC(glm_wasted, 
-  direction = "both"
+glm_wasted <- stepAIC(glm_wasted,
+    direction = "both"
 )
 
 
 # Model summary and checking
-modelsummary(glm_wasted, 
-  stars = T, 
-  coef_rename = TRUE
+modelsummary(glm_wasted,
+    stars = T,
+    coef_rename = TRUE
 )
 
 summary(glm_wasted)
@@ -194,10 +204,11 @@ ggcoef_model(glm_wasted)
 ```{r Model comparison}
 # Comparing Models for Stunting, Wasting, and Underweight
 ## Create a list of the GLMs for stunting, wasting, and underweight
-models = modelsummary(list(glm_stunted, glm_wasted, glm_underweight), 
-  stars = TRUE, 
-  coef_rename = T, 
-  col.names= c("", "Stunting", "Wasting", "Underweight")) 
+models <- modelsummary(list(glm_stunted, glm_wasted, glm_underweight),
+    stars = TRUE,
+    coef_rename = T,
+    col.names = c("", "Stunting", "Wasting", "Underweight")
+)
 
 ## Display the model summary
 models
@@ -205,7 +216,7 @@ models
 
 # Define the output file and statistics type
 ## output = "models.docx"  # Uncomment this line if you want to save the results to a Word document
-statistic = 'conf.int'
+statistic <- "conf.int"
 
 
 # Define which statistics to include in the comparison
@@ -213,13 +224,14 @@ statistic = 'conf.int'
 
 
 # Compare the models and create a comparison plot
-ggcoef_compare(model = list("Stunted" = glm_stunted, "Wasted" = glm_wasted, "Underweight" = glm_underweight),
-  type = "dodged",
-  conf.int = TRUE,
-  conf.level = 0.95,
-  add_reference_rows = TRUE,
-  significance = 0.05,
-  include = c("V729", "V191", "V445", "B4", "BORD", "M19", "B11", "V113", "M5", "V505", "H7", "travel_time_cat"),
-  no_reference_row = c("B11", "H7")
+ggcoef_compare(
+    model = list("Stunted" = glm_stunted, "Wasted" = glm_wasted, "Underweight" = glm_underweight),
+    type = "dodged",
+    conf.int = TRUE,
+    conf.level = 0.95,
+    add_reference_rows = TRUE,
+    significance = 0.05,
+    include = c("V729", "V191", "V445", "B4", "BORD", "M19", "B11", "V113", "M5", "V505", "H7", "travel_time_cat"),
+    no_reference_row = c("B11", "H7")
 )
 ```
