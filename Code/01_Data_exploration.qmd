@@ -17,7 +17,7 @@ required_packages <- c(
     "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
     "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
     "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
-    "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations", "gridExtra"
+    "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations", "gridExtra", "extrafont"
 )
 
 ## Function to check and install missing packages
@@ -32,6 +32,8 @@ install_missing_packages <- function(packages) {
 install_missing_packages(required_packages)
 
 # Load the installed packages
+library(extrafont)
+loadfonts(device = "win")
 library(tidyverse)
 library(haven)
 library(lattice)
@@ -583,7 +585,8 @@ plot1 <- ggplot(Travel_time_clust) +
     geom_text(stat = "count", family = "Times New Roman", aes(label = paste0("N = ", ..count..)), vjust = 2, size = 4) +
     geom_text(stat = "count", family = "Times New Roman", aes(label = scales::percent(..count.. / 677)), vjust = 3.5, size = 4)
 
-plot1
+ggsave("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Figures/fig3.tif", plot = plot1, dpi = 1000, width = 9, height = 12, units = "cm")
+
 
 # plot 2
 Travel_time_clust <- Travel_time_clust %>%
@@ -621,8 +624,7 @@ plot2 <- ggplot(Travel_time_clust, aes(x = travel_time_cat, y = prop, fill = URB
         legend.title = element_text(size = 9, family = "Times New Roman")
     )
 
-plot2
-
+ggsave("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Figures/fig4.tif", plot = plot2, dpi = 1000, width = 9, height = 12, units = "cm")
 
 ## Perform a chi-squared test on the travel time categories and urban/rural type
 chisq.test(Travel_time_clust$travel_time_cat, Travel_time_clust$URBAN_RURA)
@@ -675,10 +677,10 @@ mean_travel_time_df <- dplyr::arrange(mean_travel_time_df, Median)
 
 write.xlsx(mean_travel_time_df, "mean_travel_time_df.xlsx")
 
-# Saving the plots
-ggsave("plot1.png", plot1, width = 9, height = 12, units = "cm", dpi = 2500)
-ggsave("plot2.png", plot2, width = 9, height = 12, units = "cm", dpi = 2500)
-ggsave("region_plot.png", region_plot, width = 19, height = 14, units = "cm", dpi = 2500)
+# In word arrange the table underneath the boxplot
+
+ggsave("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Figures/fig5.tif", plot = region_plot, dpi = 1000, width = 19, height = 14, units = "cm")
+
 
 # Histograms and bar plots for outcome variables (stunting, underweight, wasting, and severe acute malnutrition)
 ## Stunting histogram
