@@ -14,66 +14,26 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, fig.show = "hide", eval = FA
 ```{r package loading}
 # List of required packages
 required_packages <- c(
-    "NCmisc", "tidyverse", "haven", "lattice", "data.table", "knitr", "survey",
-    "expss", "labelled", "table1", "readxl", "GGally", "kableExtra", "xtable",
-    "modelsummary", "performance", "finalfit", "naniar", "rms", "openxlsx",
-    "rcompanion", "questionr", "flextable", "MASS", "car", "cowplot", "heatmaply",
-    "esquisse", "visreg", "forcats", "mosaic", "DT", "mice", "gtsummary", "styler",
-    "languageserver", "httpgd", "miceadds", "ggmice", "howManyImputations", "gridExtra"
+    "expss", "ggmice", "ggplot2", "haven", "howManyImputations", "mice",
+    "modelsummary", "NCmisc", "readxl", "stats", "tidyr", "utils"
 )
 
-## Function to check and install missing packages
-install_missing_packages <- function(packages) {
+## Function to check, install, and load missing packages
+install_load_missing_packages <- function(packages) {
     missing_packages <- packages[!(packages %in% installed.packages()[, "Package"])]
     if (length(missing_packages) > 0) {
         install.packages(missing_packages, dependencies = TRUE)
     }
+    for (package in packages) {
+        library(package, character.only = TRUE)
+    }
 }
 
 ## Check and install missing packages
-install_missing_packages(required_packages)
+install_load_missing_packages(required_packages)
 
-# Load the installed packages
-library(tidyverse)
-library(haven)
-library(lattice)
-library(data.table)
-library(knitr)
-library(survey)
+# Options for the survey package
 options(survey.lonely.psu = "adjust")
-library(expss)
-library(labelled)
-library(table1)
-library(readxl)
-library(GGally)
-library(kableExtra)
-library(xtable)
-library(modelsummary)
-library(performance)
-library(finalfit)
-library(naniar)
-library(rms)
-library(openxlsx)
-library(rcompanion)
-library(questionr)
-library(flextable)
-library(MASS)
-library(car)
-library(cowplot)
-library(heatmaply)
-library(esquisse)
-library(visreg)
-library(forcats)
-library(mosaic)
-library(DT)
-library(mice)
-library(gtsummary)
-library(languageserver)
-library(httpgd)
-library(miceadds)
-library(ggmice)
-library(howManyImputations)
-library(gridExtra)
 ```
 
 # Data handling
