@@ -34,9 +34,9 @@ This repository contains the code for the first study of my PhD research in the 
 
 This project uses `renv` for package management to ensure a consistent and reproducible environment. Follow the steps below to set up the environment and install the required packages.
 
-## Step-by-Step Instructions
+##### Step-by-Step Instructions
 
-### Install renv in R
+###### Install renv in R
 
 If you do not have renv installed, install it by running:
 
@@ -44,7 +44,7 @@ If you do not have renv installed, install it by running:
 install.packages("renv")
 ```
 
-### Restore the Project Environment
+###### Restore the Project Environment
 
 Use renv to restore the project's R environment, which will install all the required packages as specified in the renv.lock file:
 
@@ -52,7 +52,7 @@ Use renv to restore the project's R environment, which will install all the requ
 renv::restore()
 ```
 
-### Run the Scripts
+###### Run the Scripts
 
 After restoring the environment, you can run any of the R scripts in the project.
 
