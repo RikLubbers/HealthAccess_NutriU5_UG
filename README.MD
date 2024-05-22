@@ -30,37 +30,31 @@ This repository contains the code for the first study of my PhD research in the 
 - [ARC-GIS](https://www.arcgis.com/index.html) (version 10.8.1 or higher) or any other GIS software (e.g., QGIS)
 - [Access Mod 5](https://www.accessmod.org/) (version 5.0.0 or higher)
 
-#### R packages
+#### Setting up the R environment
 
-The code is written in R and requires multiple packages. They are listed in the R script below. You can run this script in R to install and load the required packages.
+This project uses `renv` for package management to ensure a consistent and reproducible environment. Follow the steps below to set up the environment and install the required packages.
 
-    ```r
-    # R script to install and load required packages
-    # List of required packages
+## Step-by-Step Instructions
 
-    required_packages <- c(
-    "dplyr", "DT", "esquisse", "expss", "extrafont", "finalfit", "flextable",
-    "GGally", "ggplot2", "haven", "heatmaply","naniar", "openxlsx",
-    "plotly", "questionr", "readxl", "stats", "survey", "tidyr", "utils", "table1"
-    )
+### Install renv in R
 
-    ## Function to check, install, and load missing packages
+If you do not have renv installed, install it by running:
 
-    install_load_missing_packages <- function(packages) {
-    missing_packages <- packages[!(packages %in% installed.packages()[, "Package"])]
-    if (length(missing_packages) > 0) {
-        install.packages(missing_packages, dependencies = TRUE)
-    }
-    for (package in packages) {
-        library(package, character.only = TRUE)
-     }
-    }
+```{r}
+Copy code
+install.packages("renv")
+Restore the Project Environment:
+Use renv to restore the project's R environment, which will install all the required packages as specified in the renv.lock file:
+```
 
-    ## Check and install missing packages
+```{r}
+Copy code
+renv::restore()
+```
 
-    install_load_missing_packages(required_packages)
+### Run the Scripts
 
-    ```
+After restoring the environment, you can run any of the R scripts in the project.
 
 ## Usage
 
