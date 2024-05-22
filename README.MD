@@ -32,48 +32,34 @@ This repository contains the code for the first study of my PhD research in the 
 
 #### R packages
 
-The code is written in R and requires multiple packages. They are listed below:
+The code is written in R and requires multiple packages. They are listed in the R script below. You can run this script in R to install and load the required packages.
 
     ```r
+    # R script to install and load required packages
     # List of required packages
-    library(NCmisc)
-    library(tidyverse)
-    library(haven)
-    library(lattice)
-    library(data.table)
-    library(knitr)
-    library(survey)
-        options(survey.lonely.psu = "adjust")
-    library(expss)
-    library(labelled)
-    library(table1)
-    library(readxl)
-    library(GGally)
-    library(kableExtra)
-    library(xtable)
-    library(modelsummary)
-    library(performance)
-    library(finalfit)
-    library(naniar)
-    library(rms)
-    library(openxlsx)
-    library(rcompanion)
-    library(questionr)
-    library(flextable)
-    library(MASS)
-    library(car)
-    library(cowplot)
-    library(heatmaply)
-    library(esquisse)
-    library(visreg)
-    library(forcats)
-    library(mosaic)
-    library(DT)
-    library(mice)
-    library(gtsummary)
-    library(styler)
-    library(languageserver)
-    library(httpgd)
+
+required_packages <- c(
+    "dplyr", "DT", "esquisse", "expss", "extrafont", "finalfit", "flextable",
+    "GGally", "ggplot2", "haven", "heatmaply","naniar", "openxlsx",
+    "plotly", "questionr", "readxl", "stats", "survey", "tidyr", "utils", "table1"
+)
+
+    ## Function to check, install, and load missing packages
+
+install_load_missing_packages <- function(packages) {
+    missing_packages <- packages[!(packages %in% installed.packages()[, "Package"])]
+    if (length(missing_packages) > 0) {
+        install.packages(missing_packages, dependencies = TRUE)
+    }
+    for (package in packages) {
+        library(package, character.only = TRUE)
+    }
+}
+
+## Check and install missing packages
+
+install_load_missing_packages(required_packages)
+
     ```
 
 ## Usage
@@ -87,7 +73,7 @@ To download the code and data in this repository, you can either:
 - Clone the repository using Git
 - Download the repository as a ZIP file by clicking on the green "Code" button on the repository homepage and selecting "Download ZIP"
 
-Once you have downloaded the repository, you can open the R project file (`PhD-Code.Rproj`) in RStudio and run the code in the various R scripts.
+Once you have downloaded the repository, you can open the R project file (`.Rproj`) in Visual Studio Code/RStudio and run the code in the various R scripts.
 
 Note that not all the data used in this study is publicly available due to licensing. For an overview of all the datasets see [here](https://github.com/RikLubbers/PhD-Code/blob/main/Study_1/Data_and_Documentation/Data_overview.md). The data that is publicly available can be downloaded from the links provided in the file. The data that is not publicly available can be requested from the respective sources as listed.
 
@@ -111,7 +97,6 @@ If you have any questions or would like to collaborate or discuss any aspect of 
 - LinkedIn: <https://www.linkedin.com/in/rik-lubbers>
 - ORCID ID: <https://orcid.org/0000-0002-2772-1524>
 - ResearchGate: <https://www.researchgate.net/profile/Rik-Lubbers>
-- CV: <https://github.com/RikLubbers/mywebsite/raw/main/assets/CV.pdf>
 - GitHub: <https://github.com/RikLubbers>
 - University of Groningen: <https://www.rug.nl/staff/r.u.lubbers/> or <https://research.rug.nl/nl/persons/rik-lubbers>
 
