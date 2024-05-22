@@ -38,27 +38,27 @@ The code is written in R and requires multiple packages. They are listed in the 
     # R script to install and load required packages
     # List of required packages
 
-required_packages <- c(
+    required_packages <- c(
     "dplyr", "DT", "esquisse", "expss", "extrafont", "finalfit", "flextable",
     "GGally", "ggplot2", "haven", "heatmaply","naniar", "openxlsx",
     "plotly", "questionr", "readxl", "stats", "survey", "tidyr", "utils", "table1"
-)
+    )
 
     ## Function to check, install, and load missing packages
 
-install_load_missing_packages <- function(packages) {
+    install_load_missing_packages <- function(packages) {
     missing_packages <- packages[!(packages %in% installed.packages()[, "Package"])]
     if (length(missing_packages) > 0) {
         install.packages(missing_packages, dependencies = TRUE)
     }
     for (package in packages) {
         library(package, character.only = TRUE)
+     }
     }
-}
 
-## Check and install missing packages
+    ## Check and install missing packages
 
-install_load_missing_packages(required_packages)
+    install_load_missing_packages(required_packages)
 
     ```
 
