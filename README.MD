@@ -24,10 +24,10 @@ This repository contains the code for the first study of my PhD research in the 
 #### Software
 
 - [R](https://www.r-project.org/) (version 4.0.3 or higher)
-- [RStudio](https://rstudio.com/) (version 1.4.1106 or higher) or any other IDE for R
+- [RStudio](https://rstudio.com/) (version 1.4.1106 or higher) or any other IDE for R (e.g., Visual Studio Code with the R extension)
 - [Git](https://git-scm.com/) (version 2.30.0 or higher)
 - [GitHub Desktop](https://desktop.github.com/) (version 2.6.3 or higher) or any other Git client
-- [ARC-GIS](https://www.arcgis.com/index.html) (version 10.8.1 or higher) or any other GIS software
+- [ARC-GIS](https://www.arcgis.com/index.html) (version 10.8.1 or higher) or any other GIS software (e.g., QGIS)
 - [Access Mod 5](https://www.accessmod.org/) (version 5.0.0 or higher)
 
 #### R packages
