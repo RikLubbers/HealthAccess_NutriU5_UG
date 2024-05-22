@@ -41,14 +41,14 @@ This project uses `renv` for package management to ensure a consistent and repro
 If you do not have renv installed, install it by running:
 
 ```{r}
-Copy code
 install.packages("renv")
-Restore the Project Environment:
-Use renv to restore the project's R environment, which will install all the required packages as specified in the renv.lock file:
 ```
 
+### Restore the Project Environment
+
+Use renv to restore the project's R environment, which will install all the required packages as specified in the renv.lock file:
+
 ```{r}
-Copy code
 renv::restore()
 ```
 
