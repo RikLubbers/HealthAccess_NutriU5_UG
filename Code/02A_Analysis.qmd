@@ -20,13 +20,25 @@ if (!requireNamespace("renv", quietly = TRUE)) {
 # Load the renv package
 library(renv)
 
+# Check if renv is already active, activate if not
+if (!renv::status()$synchronized) {
+    renv::activate()
+}
+
 # To restore the environment (for a collaborator)
 renv::restore()
 
-# Adjust settings for specific packages
-if ("extrafont" %in% installed.packages()[, "Package"]) {
-    loadfonts(device = "win")
+required_packages <- c(
+    "expss", "ggmice", "ggplot2", "haven", "howManyImputations", "mice",
+    "modelsummary", "NCmisc", "readxl", "stats", "tidyr", "utils"
+)
+
+## Load the required packages
+for (package in required_packages) {
+    library(package, character.only = TRUE)
 }
+
+# Adjust settings for specific packages
 if ("survey" %in% installed.packages()[, "Package"]) {
     options(survey.lonely.psu = "adjust")
 }
