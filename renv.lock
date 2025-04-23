@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.1",
+    "Version": "4.4.0",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -9,6 +9,17 @@
     ]
   },
   "Packages": {
+    "DBI": {
+      "Package": "DBI",
+      "Version": "1.2.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "methods"
+      ],
+      "Hash": "065ae649b05f1ff66bb0c793107508f5"
+    },
     "MASS": {
       "Package": "MASS",
       "Version": "7.3-60",
@@ -71,6 +82,20 @@
         "utils"
       ],
       "Hash": "5ea2700d21e038ace58269ecdbeb9ec0"
+    },
+    "RcppArmadillo": {
+      "Package": "RcppArmadillo",
+      "Version": "14.4.1-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "d2db71ca6fcb649bdc599391d0687b48"
     },
     "RcppEigen": {
       "Package": "RcppEigen",
@@ -298,14 +323,14 @@
     },
     "data.table": {
       "Package": "data.table",
-      "Version": "1.15.4",
+      "Version": "1.17.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "methods"
       ],
-      "Hash": "8ee9ac56ef633d0c7cab8b2ca87d683e"
+      "Hash": "d06cd1a942bb17b607df7d57048d6840"
     },
     "desc": {
       "Package": "desc",
@@ -806,6 +831,24 @@
       ],
       "Hash": "da3b0891ad90d22484190996c4100f5e"
     },
+    "miceadds": {
+      "Package": "miceadds",
+      "Version": "3.17-44",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "RcppArmadillo",
+        "graphics",
+        "methods",
+        "mice",
+        "mitools",
+        "stats",
+        "utils"
+      ],
+      "Hash": "a546f3b00f8b967767dd76abbedd34e0"
+    },
     "mime": {
       "Package": "mime",
       "Version": "0.12",
@@ -842,6 +885,18 @@
         "utils"
       ],
       "Hash": "7664664bb3addc9fd13355952532ec59"
+    },
+    "mitools": {
+      "Package": "mitools",
+      "Version": "2.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "DBI",
+        "methods",
+        "stats"
+      ],
+      "Hash": "a4b659bd0528226724d55034f11ed7cb"
     },
     "munsell": {
       "Package": "munsell",

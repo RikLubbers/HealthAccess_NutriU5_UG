@@ -5,6 +5,13 @@
 ## No major differences were found in terms of significance compared to the non-weighted PMM approach used in the Study1_analysis file.
 
 ```{r}
+# Check if miceadds is installed, and install if not
+if (!requireNamespace("miceadds", quietly = TRUE)) {
+    install.packages("miceadds")
+}
+
+library(miceadds)
+
 # empty imputation
 imp0 <- mice::mice(DHS_children_sub,
     maxit = 0,
@@ -72,7 +79,12 @@ MICEmodels_weight <-
     modelsummary(list(MICE_model_stunt_weight, MICE_model_wast_weight, MICE_model_underweight_weight),
         stars = TRUE,
         coef_rename = TRUE,
-        col.names = c("", "Stunting", "Wasting", "Underweight")
+        col.names = c("", "Stunting", "Wasting", "Underweight"),
+        coef_omit = "^(?!trav)",
+        gof_omit = ".*",
+        conf_level = 0.95,
+        fmt = fmt_significant(3),
+        statistic = "{p.value} [{conf.low}, {conf.high}]",
     )
 
 print(MICEmodels_weight)

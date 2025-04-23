@@ -26,12 +26,19 @@ if (!renv::status()$synchronized) {
 # To restore the environment (for a collaborator)
 renv::restore()
 
-# Load the necessary packages
+# Install and load the necessary packages
 package_loading <- c(
     "dplyr", "DT", "esquisse", "expss", "extrafont", "finalfit", "flextable",
-    "GGally", "ggplot2", "haven", "heatmaply","naniar", "openxlsx",
+    "GGally", "ggplot2", "haven", "heatmaply", "naniar", "openxlsx",
     "plotly", "questionr", "readxl", "stats", "survey", "tidyr", "utils", "table1"
 )
+
+## Install missing packages
+for (package in package_loading) {
+    if (!requireNamespace(package, quietly = TRUE)) {
+        install.packages(package)
+    }
+}
 
 ## Load the packages
 for (package in package_loading) {
@@ -45,6 +52,8 @@ if ("extrafont" %in% installed.packages()[, "Package"]) {
 if ("survey" %in% installed.packages()[, "Package"]) {
     options(survey.lonely.psu = "adjust")
 }
+
+renv::snapshot()
 ```
 
 # Data handling
@@ -52,10 +61,10 @@ if ("survey" %in% installed.packages()[, "Package"]) {
 
 ```{r Data load and subsetting}
 # Load the children dataset from a .SAV file
-## depending on computer  "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
+## depending on computer  "C:/Users/rikib/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 ##                        "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 
-DHS_children_sub <- read_sav("D:/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>%
+DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>%
     dplyr::select(
         CASEID,
         V001, V005,
@@ -76,9 +85,9 @@ DHS_children_sub <- read_sav("D:/OneDrive/PhD_Undernutrition_Uganda_Physical_Acc
 
 
 # Load the travel time data from an Excel file
-## Depending on computer    "C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/TraveL_Time/Travel_time.xls"
+## Depending on computer    "C:/Users/rikib/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/TraveL_Time/Travel_time.xls"
 ##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"
-Travel_time_clust <- read_xls("D:/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/TraveL_Time/Travel_time.xls", col_names = TRUE)
+Travel_time_clust <- read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls", col_names = TRUE)
 
 
 # Merge the children dataset with the travel time data using the common column "V001" in both datasets
