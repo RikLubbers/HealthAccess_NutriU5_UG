@@ -30,7 +30,7 @@ renv::restore()
 package_loading <- c(
     "dplyr", "DT", "esquisse", "expss", "extrafont", "finalfit", "flextable",
     "GGally", "ggplot2", "haven", "heatmaply", "naniar", "openxlsx",
-    "plotly", "questionr", "readxl", "stats", "survey", "tidyr", "utils", "table1"
+    "plotly", "questionr", "readxl", "stats", "survey", "tidyr", "utils", "table1", "terra", "ggspatial", "ggthemes", "tidyterra", "ggrepel"
 )
 
 ## Install missing packages
@@ -64,7 +64,7 @@ renv::snapshot()
 ## depending on computer  "C:/Users/rikib/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 ##                        "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV"
 
-DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>%
+DHS_children_sub <- read_sav("C:/Users/rikib/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/DHS Clusters/UGKR7BSV_Children/UGKR7BFL.SAV") %>%
     dplyr::select(
         CASEID,
         V001, V005,
@@ -87,7 +87,7 @@ DHS_children_sub <- read_sav("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Ph
 # Load the travel time data from an Excel file
 ## Depending on computer    "C:/Users/rikib/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/TraveL_Time/Travel_time.xls"
 ##                          "D:/Onedrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls"
-Travel_time_clust <- read_xls("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls", col_names = TRUE)
+Travel_time_clust <- read_xls("C:/Users/rikib/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Travel_Time/Travel_time.xls", col_names = TRUE)
 
 
 # Merge the children dataset with the travel time data using the common column "V001" in both datasets
@@ -508,7 +508,11 @@ plot1 <- ggplot(Travel_time_clust) +
     aes(x = travel_time_cat, fill = travel_time_cat) +
     geom_bar(color = "black") +
     scale_fill_manual(values = c("#77dd77", "#c3f0c8", "#fdae7e", "#ffb3a7")) +
-    labs(x = "Travel Time Categories", y = "Travel Time in Walking in Min.", caption = "Data source: Demographic and Health Surveys (DHS) & Authors") +
+    labs(
+        x = "Travel Time Categories",
+        y = "Number of Clusters",
+        caption = "Data source: Demographic and Health Surveys (DHS) & Authors"
+    ) +
     guides(fill = FALSE) +
     theme_light() +
     theme(
@@ -617,8 +621,110 @@ write.xlsx(mean_travel_time_df, "mean_travel_time_df.xlsx")
 
 ggsave("C:/Users/Rik/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Figures/fig5.tif", plot = region_plot, dpi = 1000, width = 19, height = 14, units = "cm")
 
-```
+# Load regions shapefile (15 subregions)
+shp_dir <- "C:/Users/rikib/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Data/DATA/Uganda Full/Administrative boundaries/Uganda 2016 DHS - sdr_subnational_boundaries_2025-07-02/shps"
+shp_files <- list.files(shp_dir, pattern = "\\.shp$", full.names = TRUE)
+shp_path <- shp_files[1]
 
+# Read shapefile as SpatVector
+uganda_regions_vect <- terra::vect(shp_path)
+
+# First: recode REGNAME to match V024 naming
+uganda_regions_vect$REGNAME <- dplyr::recode(uganda_regions_vect$REGNAME,
+  "Central 1" = "South Buganda",
+  "Central 2" = "North Buganda",
+  "Bugishu"   = "Bugisu"
+)
+
+# Extract ggplot build object
+p_build <- ggplot_build(region_plot)
+
+# Get the plotted order of the x-axis (the regions) — this is the key fix
+plotted_regions <- p_build$layout$panel_params[[1]]$x$get_labels()
+
+# Extract the fill colors in the same order
+fill_colors <- p_build$data[[1]]$fill[!duplicated(p_build$data[[1]]$group)]
+
+# Combine into a named vector
+# Remove line breaks in region names to match shapefile
+plotted_regions_clean <- gsub("\n", " ", plotted_regions)
+
+# Assign cleaned names to color vector
+region_colors <- setNames(fill_colors, plotted_regions_clean)
+
+uganda_regions_vect$REGNAME <- factor(uganda_regions_vect$REGNAME, levels = names(region_colors))
+
+# Get centroids of regions
+region_centroids <- terra::centroids(uganda_regions_vect)
+
+# Extract coordinates as a matrix
+coords <- terra::crds(region_centroids)
+
+# Combine coordinates and region names into a data frame
+label_df <- data.frame(
+  x = coords[, 1],
+  y = coords[, 2],
+  REGNAME = uganda_regions_vect$REGNAME
+)
+
+# Plot using tidyterra
+region_map = ggplot() +
+    geom_spatvector(data = uganda_regions_vect, aes(fill = REGNAME),
+                                    color = "black", size = 0.3, alpha = 0.8) +
+
+    # Improved label placement using centroids
+    geom_label_repel(
+        data = label_df,
+        aes(x = x, y = y, label = REGNAME),
+        size = 3,
+        family = "Times New Roman",
+        fontface = "bold",
+        box.padding = 0.4,
+        point.padding = 0.2,
+        fill = "white",
+        color = "black",
+        label.size = 0.2,
+        max.overlaps = Inf
+    ) +
+
+    # North arrow
+    annotation_north_arrow(
+        location = "tr", which_north = "true",
+        style = north_arrow_orienteering,
+        height = unit(1.2, "cm"), width = unit(1.2, "cm"),
+        pad_x = unit(0.6, "cm"), pad_y = unit(0.6, "cm")
+    ) +
+
+annotation_scale(
+  location = "bl",
+  width_hint = 0.15,             # smaller width to avoid crowding
+  bar_cols = c("black", "white"),# clearer contrast
+  style = "bar",
+  text_cex = 0.7,                # slightly smaller font
+  line_width = 0.3,              # thinner scale lines
+  unit_category = "metric",      # ensures "km" units
+  height = unit(0.25, "cm")      # makes the scale more compact
+) +
+
+    scale_fill_manual(values = region_colors, guide = "none") +
+    theme_map() +
+    labs(
+        caption = "Administrative boundaries: DHS Spatial Repository"
+    ) +
+    theme(
+        plot.title = element_text(face = "bold", family = "Times New Roman"),
+        plot.subtitle = element_text(family = "Times New Roman"),
+        plot.caption = element_text(family = "Times New Roman", size = 8),
+        plot.background = element_rect(fill = "white", color = NA, size = 0),
+        panel.background = element_rect(fill = "white", color = NA, size = 0),
+        panel.border = element_blank()
+    )
+
+region_map
+
+# GGsave the map
+ggsave("C:/Users/rikib/OneDrive/PhD_Undernutrition_Uganda_Physical_Accessbility/1_Study_1_Physical_access/Figures/fig1.tif", plot = region_map, dpi = 300, width = 19, height = 14, units = "cm")
+```
 
 ## Visualizing outcome variables
 ```{r}
