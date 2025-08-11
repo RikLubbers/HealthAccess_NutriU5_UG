@@ -8,7 +8,6 @@ This repository contains the code for the study titled "Geographical accessibili
 
 ## Table of Contents
 
-- [Study Title](#Geographical accessibility to public healthcare facilities and undernutrition in children under-5 in Uganda: a cross-sectional spatial analysis)
   - [Description](#description)
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
