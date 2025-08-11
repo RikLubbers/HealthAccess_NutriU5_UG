@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Physical Accessibility to Public Healthcare Facilities and Undernutrition in Children Under 5 in Uganda</h1>
+    <h1>Geographical accessibility to public healthcare facilities and undernutrition in children under-5 in Uganda: a cross-sectional spatial analysis</h1>
 </div>
 
 ## Description
