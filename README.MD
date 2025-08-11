@@ -4,11 +4,11 @@
 
 ## Description
 
-This repository contains the code for the first study of my PhD research in the Global Health Unit at the University Medical Center Groningen (UMCG). Study 1 is an analysis of the impact of physical accessibility on undernutrition outcomes in children under-5 in Uganda.
+This repository contains the code for the study titled "Geographical accessibility to public healthcare facilities and undernutrition in children under-5 in Uganda: a cross-sectional spatial analysis" (https://doi.org/10.1080/19376812.2025.2538772), published in the African Geographical Review.
 
 ## Table of Contents
 
-- [Study Title](physical-accessibility-to-public-healthcare-facilities-and-undernutrition-in-children-under-5-in-uganda)
+- [Study Title](Geographical accessibility to public healthcare facilities and undernutrition in children under-5 in Uganda: a cross-sectional spatial analysis)
   - [Description](#description)
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
